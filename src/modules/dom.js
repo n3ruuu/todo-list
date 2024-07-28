@@ -1,21 +1,8 @@
 import Project from './project.js'
 
 export default class DOM {
-    constructor() {
-        this.projects = [
-            {
-                title: 'Project 1',
-                todos: []
-            }, 
-            {
-                title: 'Project 2',
-                todos: []
-            },
-            {
-                title: 'Project 3',
-                todos: []
-            }
-        ]
+    constructor(projectManager) {
+        this.projectManager = projectManager
         // cache dom
         this.sidebar = document.querySelector('.sidebar')
         this.addProjectBtn = document.querySelector('.add-project.btn')
@@ -25,7 +12,8 @@ export default class DOM {
     }
 
     renderProjects() {
-        this.projects.forEach(project => {
+        const projects = this.projectManager.getProjects()
+        projects.forEach(project => {
             const li = document.createElement('li')
             li.textContent = project.title
             this.projectList.append(li)
@@ -70,13 +58,13 @@ export default class DOM {
 
     appendProject(projectName) { 
         const newProject = new Project(projectName)
-        this.projects.push(newProject)
+        this.projectManager.projects.push(newProject)
+        this.createListElement(projectName)        
+    }
 
-        alert(`${newProject.title} is added succcessfully!`)
-
+    createListElement(projectName) {
         const li = document.createElement('li')
         li.textContent = projectName
-
         this.projectList.appendChild(li)
         this.hideInputField()
     }
@@ -89,7 +77,7 @@ export default class DOM {
     }
 
     checkIfExists(projectName) {
-        return this.projects.some(project => project.title === projectName)
+        return this.projectManager.projects.some(project => project.title === projectName)
     }
 }
 

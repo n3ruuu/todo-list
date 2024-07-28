@@ -1,7 +1,9 @@
+import ProjectManager from './modules/projectManager.js'
 import DOM from './modules/dom.js'
 
-const domManager = new DOM()
-
 const init = (() => {
+    const projectManager = new ProjectManager()
+    const domManager = new DOM(projectManager)
+
     domManager.renderProjects()
 })()
