@@ -1,0 +1,63 @@
+:root {
+    --primary-clr: #FFFFFF;
+    --secondary-clr: #F6F6F6;
+    --line-dash: #E6E6E6;
+    --black-text: #222222;
+    --hover-clr: #E4E4E4;
+}
+
+body {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    color: var(--black-text);
+    font-family: Poppins, sans-serif;
+}
+
+main {
+    display: flex;
+    height: inherit;
+}
+
+.sidebar {
+    background-color: var(--secondary-clr);
+    border-right: 1px solid var(--line-dash);
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    background-color: var(--primary-clr);
+    width: 80%;
+}
+
+.btn,
+input {
+    font-family: inherit;
+}
+
+.add-project.btn {
+    font-size: 1.5rem;
+    margin: 10px;
+}
+
+li {
+    list-style-type: none;
+    padding: 5px 0;
+}
+
+li:hover {
+    background-color: var(--hover-clr);
+    padding-left: 20px;
+    border-radius: 5px;
+}
+
+.project-input {
+    width: 80%;
+    font-size: inherit;
+    border: 1px solid var(--line-dash);
+    border-radius: 5px;
+    padding-left: 20px;
+}   
