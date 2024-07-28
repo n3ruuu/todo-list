@@ -2,7 +2,20 @@ import Project from './project.js'
 
 export default class DOM {
     constructor() {
-        this.projects = []
+        this.projects = [
+            {
+                title: 'Project 1',
+                todos: []
+            }, 
+            {
+                title: 'Project 2',
+                todos: []
+            },
+            {
+                title: 'Project 3',
+                todos: []
+            }
+        ]
         // cache dom
         this.sidebar = document.querySelector('.sidebar')
         this.addProjectBtn = document.querySelector('.add-project.btn')
@@ -11,17 +24,32 @@ export default class DOM {
         this.addProjectBtn.addEventListener('click', this.showInputField.bind(this))
     }
 
+    renderProjects() {
+        this.projects.forEach(project => {
+            const li = document.createElement('li')
+            li.textContent = project.title
+            this.projectList.append(li)
+        })
+    }
+
+    showInputField() {
+        if (!this.projectInput) {
+            this.projectInput = this.createInputField()
+            this.projectList.appendChild(this.projectInput)
+        }
+    }
+
     createInputField() {
         const input = document.createElement('input')
         input.className = 'project-input'
         input.type = 'text'
         input.focus()
-        input.addEventListener('keydown', this.handInputKeyDown.bind(this))
+        input.addEventListener('keydown', this.handleInputKeyDown.bind(this))
         input.addEventListener('blur', this.hideInputField.bind(this))
         return input
     }
 
-    handInputKeyDown(e) {
+    handleInputKeyDown(e) {
         if (e.key === `Enter`) {
             const projectName = e.target.value.trim();
             if (this.isValid(projectName)) {
@@ -48,19 +76,13 @@ export default class DOM {
 
         const li = document.createElement('li')
         li.textContent = projectName
+
         this.projectList.appendChild(li)
         this.hideInputField()
     }
 
-    showInputField() {
-        if (!this.projectInput) {
-            this.projectInput = this.createInputField()
-            this.projectList.appendChild(this.projectInput)
-        }
-    }
-
     hideInputField() {
-        if (this.projectInput) {
+        if (this.projectInput && this.projectInput.value === '') {
             this.projectInput.style.display = 'none';
             this.projectInput = null
         }

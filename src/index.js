@@ -1,3 +1,7 @@
 import DOM from './modules/dom.js'
 
-const newDOM =new DOM()
+const domManager = new DOM()
+
+const init = (() => {
+    domManager.renderProjects()
+})()
