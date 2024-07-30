@@ -3,6 +3,8 @@ import Project from './project.js'
 export default class DOM {
     constructor(projectManager) {
         this.projectManager = projectManager
+    constructor(projectManager) {
+        this.projectManager = projectManager
         // cache dom
         this.sidebar = document.querySelector('.sidebar')
         this.addProjectBtn = document.querySelector('.add-project.btn')
@@ -75,7 +77,11 @@ export default class DOM {
         this.projectManager.projects.push(newProject)
         this.createListElement(projectName)        
     }
+        this.projectManager.projects.push(newProject)
+        this.createListElement(projectName)        
+    }
 
+    createListElement(projectName) {
     createListElement(projectName) {
         const li = document.createElement('li')
         li.textContent = projectName
@@ -91,6 +97,7 @@ export default class DOM {
     }
 
     checkIfExists(projectName) {
+        return this.projectManager.projects.some(project => project.title === projectName)
         return this.projectManager.projects.some(project => project.title === projectName)
     }
 
