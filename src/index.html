@@ -12,12 +12,38 @@
         <div class="sidebar">
             <button class="add-project btn">Add Project</button>
             <ul class="project-list">
-                <li>Project 1</li>
-                <li>Project 2</li>
-                <li>Project 3</li>
+             
             </ul>
         </div>
-        <div class="content"></div>
+        <div class="content">
+                <h1>Todo 1</h1>
+                <button class="add-todo btn">Add Todo</button>
+                <div class="modal" style="display: none;">
+                    <form action="#" method="post">
+                        <fieldset>
+                             <div class="exit">✕</div>
+
+                            <legend>Add a Task</legend>
+        
+                            <textarea name="title" id="title" placeholder="Title" required></textarea>
+                            <textarea name="description" id="description" placeholder="Add task description" required></textarea>
+
+                            <div class="due-date">
+                                <p>Due Date: </p>
+                                <input type="date" name="duedate" id="duedate" required>
+                            </div>
+                            <div class="priority">
+                                <div class="text">Priority</div>
+                                <button class="low">LOW</button>
+                                <button class="medium">MEDIUM</button>
+                                <button class="high">HIGH</button>
+                            </div>
+
+                            <button type="submit" class="add-task btn">ADD TASK</button>
+                        </fieldset>
+                    </form>
+                </div>
+        </div>
     </main>
     <footer></footer>
 </body>

@@ -11,6 +11,7 @@ body {
     padding: 0;
     margin: 0;
     height: 100vh;
+    line-height: 1.5;
     color: var(--black-text);
     font-family: Poppins, sans-serif;
 }
@@ -26,11 +27,6 @@ main {
     width: 20%;
     display: flex;
     flex-direction: column;
-}
-
-.content {
-    background-color: var(--primary-clr);
-    width: 80%;
 }
 
 .btn,
@@ -61,3 +57,149 @@ li:hover {
     border-radius: 5px;
     padding-left: 20px;
 }   
+
+.content {
+    background-color: var(--primary-clr);
+    width: 80%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content h1, 
+.content .add-todo.btn {
+    margin-left: 200px;
+}
+
+.add-todo.btn {
+    width: 100px;
+}
+
+.modal {
+    align-self: center;
+    position: absolute;
+    background-color: var(--secondary-clr);
+    top: 20%;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    width: 50%;
+    height: min-content;
+    padding: 20px;
+    border: 1px solid var(--line-dash);
+    border-radius: 8px;
+}
+
+fieldset{
+    border: none;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.due-date {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.due-date input {
+    width: 120px;
+    height: 50px;
+    padding: 0 20px;
+    border-radius: 8px;
+    border-style: none;
+    border: 1px solid ablackqua;
+    color: black;
+}
+
+#title,
+#description {
+    font-size: 1.15rem;
+    padding-top: 10px;
+    padding-left: 20px;
+    font-family: inherit;
+    border: none;
+    resize: none;
+}
+
+#title {
+    border-bottom: 2px solid var(--line-dash);
+}
+
+.priority {
+    display: flex;
+    gap: 20px;
+}
+
+.priority button {
+    font-family: inherit;
+    border-radius: 4px;
+    padding: 0 8px;
+    width: 80px;
+    cursor: pointer;
+}
+
+.low {
+    color: green;
+    border: 1px solid green;
+}
+
+.medium {
+    color: orange;
+    border: 1px solid orange;
+}
+
+.high {
+    color: red;
+    border: 1px solid red;
+}
+
+.low:hover {
+    color: white;
+    background-color: green;
+}
+
+.medium:hover {
+    color: white;
+    background-color: orange;
+}
+
+.high:hover {
+    color: white;
+    background-color: red;
+}
+
+.add-task.btn {
+    position: absolute;
+    bottom: 20px;
+    width: 100px;
+    height: 40px;
+    border-radius: 8px;
+    color: blue;
+    border: 1px solid blue;
+    cursor: pointer;
+    right: 40PX;
+}
+
+.exit {
+    position: absolute;
+    color: gray;
+    top: 20px;
+    right: 40px;
+    cursor: pointer
+}
+
+.exit:hover {
+    color: black;
+    font-weight: bold;
+}
+
+.add-task.btn:hover {
+    color: white;
+    background-color: blue;
+}
+
+#description {
+    height: 200px; /* Set the height of the input field */
+    word-break: normal;
+}
