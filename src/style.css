@@ -73,6 +73,7 @@ li:hover {
 
 .add-todo.btn {
     width: 100px;
+    margin-bottom: 50px;
 }
 
 .modal {
@@ -108,8 +109,13 @@ fieldset{
     padding: 0 20px;
     border-radius: 8px;
     border-style: none;
-    border: 1px solid ablackqua;
-    color: black;
+    border: 1px solid blue;
+    color: blue;
+    cursor: pointer;
+}
+
+.due-date input:hover {
+    background-color: rgba(128, 128, 128, 0.5);
 }
 
 #title,
@@ -120,6 +126,10 @@ fieldset{
     font-family: inherit;
     border: none;
     resize: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 #title {
@@ -179,6 +189,7 @@ fieldset{
     border: 1px solid blue;
     cursor: pointer;
     right: 40PX;
+    background-color: #eda59e;
 }
 
 .exit {
@@ -202,4 +213,53 @@ fieldset{
 #description {
     height: 200px; /* Set the height of the input field */
     word-break: normal;
+}
+
+.todo-container {
+    width: 1000px;
+    font-size: 1.2rem;
+    align-self: center;
+    display: flex;
+    background-color: var(--secondary-clr);
+    padding: 20px;
+    gap: 20px;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.todo-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.circle {
+    border: 2px solid transparent;
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    border-color: #999;
+    border-width: 1px;
+}
+
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 95%;
+}
+
+.text-container .description {
+    font-size: 1rem;
+}
+
+.actions-container {
+    display: flex;
+    gap: 10px;
+}
+
+.svg {
+    width: 30px;
+    height: 30px;
 }
