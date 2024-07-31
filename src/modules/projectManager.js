@@ -39,4 +39,9 @@ export default class ProjectManager {
     getProjects() {
         return this.projects
     }
+
+    getTodosByTitle(title) {
+        const project = this.projects.find(p => p.title === title)
+        return project ? project.todos : []
+    }
 }

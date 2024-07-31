@@ -151,32 +151,38 @@ span {
     cursor: pointer;
 }
 
-.low {
+#low {
     color: green;
     border: 1px solid green;
+    background-color: inherit;
 }
 
-.medium {
+#medium {
     color: orange;
     border: 1px solid orange;
+    background-color: inherit;
 }
 
-.high {
+#high {
     color: red;
     border: 1px solid red;
+    background-color: inherit;
 }
 
-.low:hover {
+#low:hover,
+#low.active {
     color: white;
     background-color: green;
 }
 
-.medium:hover {
+#medium:hover,
+#medium.active {
     color: white;
     background-color: orange;
 }
 
-.high:hover {
+#high:hover,
+#high.active {
     color: white;
     background-color: red;
 }
