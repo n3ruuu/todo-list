@@ -40,6 +40,7 @@ input {
 }
 
 li {
+    cursor: pointer;
     list-style-type: none;
     padding: 5px 0;
 }
@@ -128,7 +129,8 @@ fieldset{
     resize: none;
 }
 
-button {
+button,
+span {
     cursor: pointer;
 }
 
@@ -189,8 +191,8 @@ button {
     border: 1px solid blue;
     cursor: pointer;
     right: 40PX;
-    background-color: #eda59e;
 }
+
 
 .exit {
     position: absolute;
@@ -215,7 +217,14 @@ button {
     word-break: normal;
 }
 
-.todo-container {
+.todos-container {
+    display: flex;
+    width: 90%;
+    align-self: center;
+    flex-wrap: wrap;
+}
+
+.item-container {
     width: 1000px;
     font-size: 1.2rem;
     align-self: center;
@@ -223,6 +232,7 @@ button {
     background-color: var(--secondary-clr);
     padding: 20px;
     gap: 20px;
+    width: 45%;
     border-radius: 8px;
     margin: 10px;
 }
@@ -241,6 +251,9 @@ button {
     border-width: 1px;
 }
 
+.actions-container img {
+    cursor: pointer;
+}
 
 .text-container {
     display: flex;

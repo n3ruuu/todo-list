@@ -12,6 +12,7 @@ export default class DOM {
         this.exitBtn = document.querySelector('.exit')
      
         // bind events
+        this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
         this.addProjectBtn.addEventListener('click', this.showInputField.bind(this))
         this.addTodoBtn.addEventListener('click', this.showModal.bind(this))
         this.exitBtn.addEventListener('click', this.hideModal.bind(this))
@@ -23,6 +24,18 @@ export default class DOM {
 
     hideModal() {
         this.modal.style.display = 'none'
+    }
+
+    handleProjectClick(e) {
+        if (e.target.tagName === 'LI') {
+            this.renderTodos(e);
+        }
+    }
+
+    renderTodos(e) {
+        const contentDiv = document.querySelector('.content')
+        contentDiv.innerHTML = ''
+        console.log(e)
     }
 
     renderProjects() {
@@ -92,11 +105,5 @@ export default class DOM {
 
     checkIfExists(projectName) {
         return this.projectManager.projects.some(project => project.title === projectName)
-    }
-
-    // Todo 
-
-    renderTodos() {
-
     }
 }
