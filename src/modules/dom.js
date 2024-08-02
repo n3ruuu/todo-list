@@ -13,11 +13,10 @@ export default class DOM {
     editTodo(e) {
         const todoTitle = e.target.closest('.todo-header').textContent.trim()
         const todoItem = this.projectManager.getTodoItem(todoTitle)
-        console.log(todoTitle)
         const project = this.projectManager.getProjects().find(project => 
             project.todos.some(todo => todo.title === todoTitle)
         )
-
+        console.log(todoTitle, project)
         this.selectedProject = project
         this.editFields(todoItem)
     }
@@ -34,58 +33,51 @@ export default class DOM {
 
         this.addTaskBtn.classList.add('edit')
         if (this.addTaskBtn.classList.contains('edit')) {
+            this.addTaskBtn.textContent = 'Edit Task'
             this.addTaskBtn.addEventListener('click', () => {
                 this.saveEditedTask(todoItem)
-            })
+            })  
         }
-        this.addTaskBtn.classList.remove('edit')
         this.showModal()
     }
 
     getTodoPriority(priorityValue) {
-        // Remove 'active' class from all priority buttons
-        const priorityBtns = document.querySelectorAll('.priority button');
+        const priorityBtns = document.querySelectorAll('.priority button')
         priorityBtns.forEach(button => {
-            button.classList.remove('active');
+            button.classList.remove('active')
         })
     
-        // Add 'active' class to the button matching the priority value
         priorityBtns.forEach(button => {
             if (button.textContent.trim() === priorityValue.toString().toUpperCase()) {
-                button.classList.add('active');
+                button.classList.add('active')
             }
-        });
-    }
+        })
+    } //
 
-    saveEditedTask(todoItem) {
-        const todoTitleField = document.querySelector('#title')
-        const todoDescriptionField = document.querySelector('#description')
-        const todoDuedateField = document.querySelector('#duedate')
+    // saveEditedTask(todoItem) {
+    //     const todoTitleField = document.querySelector('#title')
+    //     const todoDescriptionField = document.querySelector('#description')
+    //     const todoDuedateField = document.querySelector('#duedate')
         
-        todoItem.title = todoTitleField.value.trim()
-        todoItem.description = todoDescriptionField.value.trim()
-        todoItem.dueDate = todoDuedateField.value.trim()
-        todoItem.priority = this.getPriority()
+    //     todoItem.title = todoTitleField.value.trim()
+    //     todoItem.description = todoDescriptionField.value.trim()
+    //     todoItem.dueDate = todoDuedateField.value.trim()
+    //     todoItem.priority = this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
 
-        const project = this.projectManager.getProjects().find(project => 
-            project.todos.some(todo => todo.title === todoItem.title)
-        )
-        
-        if (project) {
-            const index = project.todos.findIndex(todo => todo.title === todoItem.title)
-            if (index !== -1) {
-                project.todos[index] = todoItem
-            }
-        }
+    //     const project = this.projectManager.getProjects().find(project => 
+    //         project.todos.some(todo => todo.title === todoItem.title)
+    //     )
 
-        this.renderTodos()
-        this.hideModal()
-    } 
+    //     if (project) {
+    //         con
+    //     }
+
+    // } 
 
     setPriority(e) {
         if (e.target.tagName === "BUTTON") {
             const priorityValue = e.target.textContent
-            this.selectedPriority = priorityValue
+            this.selectedPriority = priorityValue.charAt(0).toUpperCase() + priorityValue.slice(1).toLowerCase()
 
             const priorityBtns = document.querySelectorAll('.priority button')
             priorityBtns.forEach(button => {
@@ -99,25 +91,36 @@ export default class DOM {
         if (e.target.tagName === 'LI') {
             const projectName = e.target.textContent
             this.selectedProject = projectName
-            this.renderTodos(projectName)
+            this.displayProjectTodos(projectName)
         }
     }
 
-    renderTodos(projectName) {
+    displayProjectTodos(projectName) {
+        const contentDiv = document.querySelector('.content')
         const header = document.querySelector('.content h1')
-
         const todosContainer = document.querySelector('.todos-container')
-        todosContainer.innerHTML = ''
 
-        let todos
+        this.clearTodos()
+        
         if (projectName) {
-            todos = this.projectManager.getTodosByTitle(projectName)
+            const todos = this.projectManager.getTodosByTitle(projectName)
             header.textContent = projectName
+            
+            if (!this.addTodoBtn) {
+                this.addTodoBtn = this.createAddTodoButton()
+                contentDiv.insertBefore(this.addTodoBtn, todosContainer)
+            }
+            todos.forEach(todo => this.createTodoContainer(todo))   
         }
-        else todos = this.projectManager.getAllTodos()
+    } //
 
-        todos.forEach(todo => this.createTodoContainer(todo))
-    }
+    createAddTodoButton() {
+        const button = document.createElement('button')
+        button.className = 'add-todo btn'
+        button.textContent = 'Add Todo'
+        button.addEventListener('click', () => this.showModal())
+        return button
+    } //
 
     createTodoContainer(todo) {
         const todosContainer = document.querySelector('.todos-container')
@@ -164,29 +167,22 @@ export default class DOM {
         const todoTitle = document.querySelector('#title').value
         const todoDescription = document.querySelector('#description').value
         const todoDuedate = document.querySelector('#duedate').value
-        const priority = this.getPriority()
+        const priority = this.selectedPriority
+        console.log(priority)
 
         if (!todoTitle || !todoDescription || !todoDuedate) {
             alert('Please fill in all fields.')
             return
         }
 
-        if (!this.selectedProject) {
-            alert('No project selected.')
-            return
-        }
-
         const newTodo = new Todo(todoTitle, todoDescription, todoDuedate, priority)
         const todos = this.projectManager.getTodosByTitle(this.selectedProject)
         todos.push(newTodo)
-        this.renderTodos(this.selectedProject.title)
+        this.closeModal()
+        this.displayProjectTodos(this.selectedProject)
     }
 
-    getPriority() {
-        return this.selectedPriority
-    }
-
-    renderProjects() {
+    displayProjects() {
         const projects = this.projectManager.getProjects()
         projects.forEach(project => {
             const li = document.createElement('li')
@@ -201,7 +197,7 @@ export default class DOM {
             this.projectList.appendChild(this.projectInput)
             this.projectInput.focus()
         } 
-    }
+    } //
 
     createInputField() {
         const input = document.createElement('input')
@@ -209,7 +205,7 @@ export default class DOM {
         input.type = 'text'
         input.addEventListener('keydown', this.handleInputKeyDown.bind(this))
         return input
-    }
+    } //
 
     handleInputKeyDown(e) {
         const projectName = e.target.value.trim();
@@ -220,7 +216,7 @@ export default class DOM {
             e.target.value = ''
             this.hideInputField()
         }
-    }
+    } //
 
     isValid(name) {
         if (name === '') return false
@@ -229,35 +225,34 @@ export default class DOM {
             return false
         }
         return true
-    }
+    } //
 
     appendProject(projectName) { 
         const newProject = new Project(projectName)
         this.projectManager.projects.push(newProject)
         this.createListElement(projectName)        
-    }
+    } //
 
     createListElement(projectName) {
         const li = document.createElement('li')
         li.textContent = projectName
         this.projectList.appendChild(li)
         this.hideInputField()
-    }
+    } //
 
     hideInputField() {
         if (this.projectInput) {
             this.projectInput.remove();
             this.projectInput = null
         } 
-    }
+    } //
 
     checkIfExists(projectName) {
         return this.projectManager.projects.some(project => project.title === projectName)
-    }
+    } //
 
     navigateItem(e) {
         const item = e.target.textContent
-        
         if (item === 'Home') this.loadHome()
         else if (item === 'Today') this.loadToday()
         else if (item === 'Week') this.loadWeek()
@@ -267,12 +262,85 @@ export default class DOM {
     loadHome() {
         const header = document.querySelector('h1')
         header.textContent = 'Home'
+        this.displayAllTodos()
+        this.removeButton()
+    }
 
-        this.renderTodos()
+    loadToday() {
+        const header = document.querySelector('h1')
+        header.textContent = 'Today'
+
+        this.clearTodos()
+
+        const today = new Date().toISOString().split('T')[0]
+        console.log(today)
+        const projects = this.projectManager.getProjects() 
+        for (const project of projects) {
+            const todayTodos = project.todos.filter(todo => todo.dueDate === today)
+            for (const todo of todayTodos) {
+                this.createTodoContainer(todo)
+            } 
+        }
+        this.removeButton()
+    }
+
+    loadWeek() {
+        const header = document.querySelector('h1');
+        header.textContent = 'This Week';
+    
+        this.removeButton()
+        this.clearTodos();
+    
+        const { start, end } = this.getWeekDates(); // Get start and end of the week
+    
+        const projects = this.projectManager.getProjects();
+        for (const project of projects) {
+            const weekTodos = project.todos.filter(todo => todo.dueDate >= start && todo.dueDate <= end
+            );
+            for (const todo of weekTodos) {
+                this.createTodoContainer(todo); // Display the filtered todos
+            }
+        }
+    }
+
+    getWeekDates() {
+        const now = new Date()
+        const dayOfWeek = now.getDay() // 0 (Sunday) to 6 (Saturday)
+        const startOfWeek = new Date(now)
+        startOfWeek.setDate(now.getDate() - dayOfWeek) // Move to the start of the week
+    
+        const endOfWeek = new Date(startOfWeek)
+        endOfWeek.setDate(startOfWeek.getDate() + 6) // Move to the end of the week
+    
+        // Format dates as YYYY-MM-DD
+        const start = startOfWeek.toISOString().split('T')[0]
+        const end = endOfWeek.toISOString().split('T')[0]
+    
+        return { start, end }
+    } // ??
+    
+    displayAllTodos = () => {
+        this.clearTodos()
+        const allTodos = this.projectManager.getAllTodos()
+        for (const todo of allTodos) {
+            this.createTodoContainer(todo)
+        }
+    }
+
+    removeButton = () => {
+        if (this.addTodoBtn) {
+            this.addTodoBtn.remove()
+            this.addTodoBtn = null
+        }
+    }
+
+    clearTodos = () => {
+        const todosContainer = document.querySelector('.todos-container')
+        todosContainer.innerHTML = ''
     }
 
     showModal = () => this.modal.style.display = 'block' 
-    hideModal = () => this.modal.style.display = 'none'
+    closeModal = () => this.modal.style.display = 'none'
     cacheDomElements = () => {
          this.sidebar = document.querySelector('.sidebar')
          this.addProjectBtn = document.querySelector('.add-project.btn')
@@ -296,8 +364,7 @@ export default class DOM {
         this.priorityBtn.addEventListener('click', this.setPriority.bind(this))
         this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
         this.addProjectBtn.addEventListener('click', this.showInputField.bind(this))
-        // this.addTodoBtn.addEventListener('click', this.showModal.bind(this))
         this.addTaskBtn.addEventListener('click', this.addTask.bind(this))
-        this.exitBtn.addEventListener('click', this.hideModal.bind(this))
+        this.exitBtn.addEventListener('click', this.closeModal.bind(this))
     }
 }

@@ -7,7 +7,7 @@ export default class ProjectManager {
                     {
                         title: 'Todo 1',
                         description: "Description 1",
-                        dueDate: '2024-07-31', 
+                        dueDate: '2024-08-02', 
                         priority: "High"
                     },
                     {
