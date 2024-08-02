@@ -16,23 +16,28 @@ export default class ProjectManager {
                         dueDate: '2024-07-31', 
                         priority: "Medium"
                     },    
-                    {
-                        title: 'Todo 3',
-                        description: "Description 3",
-                        dueDate: '2024-07-31', 
-                        priority: "Low"
-                    }    
                 ]
             }, 
             { 
                 title: 'Project 2', 
                 todos: [
                     {
+                        title: 'Todo 3',
+                        description: "Description 3",
+                        dueDate: '2024-07-31', 
+                        priority: "Low"
+                    },
+                    {
                         title: 'Todo 4',
                         description: "Description 4",
                         dueDate: '2024-07-31', 
                         priority: "High"
-                    },
+                    }
+                ] 
+            }, 
+            { 
+                title: 'Project 3', 
+                todos: [
                     {
                         title: 'Todo 5',
                         description: "Description 5",
@@ -45,11 +50,7 @@ export default class ProjectManager {
                         dueDate: '2024-07-31', 
                         priority: "Low"
                     }    
-                ] 
-            }, 
-            { 
-                title: 'Project 3', 
-                todos: []
+                ]
             }, 
         ]  
     }
