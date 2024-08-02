@@ -275,6 +275,18 @@ span,
     border-width: 1px;
 }
 
+.low-priority {
+    border-color: green;
+}
+
+.medium-priority {
+    border-color: orange;
+}
+
+.high-priority {
+    border-color: red;
+}
+
 .actions-container img {
     cursor: pointer;
 }

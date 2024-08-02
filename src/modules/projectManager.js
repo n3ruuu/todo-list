@@ -28,20 +28,20 @@ export default class ProjectManager {
                 title: 'Project 2', 
                 todos: [
                     {
-                        title: 'Todo 1',
-                        description: "Description 1",
+                        title: 'Todo 4',
+                        description: "Description 4",
                         dueDate: '2024-07-31', 
                         priority: "High"
                     },
                     {
-                        title: 'Todo 2',
-                        description: "Description 2",
+                        title: 'Todo 5',
+                        description: "Description 5",
                         dueDate: '2024-07-31', 
                         priority: "Medium"
                     },    
                     {
-                        title: 'Todo 3',
-                        description: "Description 3",
+                        title: 'Todo 6',
+                        description: "Description 6",
                         dueDate: '2024-07-31', 
                         priority: "Low"
                     }    
@@ -65,7 +65,8 @@ export default class ProjectManager {
 
     getTodoItem(title) {
         for (const project of this.projects) {
-            return project.todos.find(todo => todo.title === title)
+            const todo = project.todos.find(todo => todo.title === title)
+            if (todo) return todo
         }
     }
 
