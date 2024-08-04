@@ -6,6 +6,7 @@ export default class DOM {
         this.projectManager = projectManager
         this.selectedProject = ''
         this.selectedPriority = ''
+        this.currentTab = 'Home'
         this.cacheDomElements()
         this.bindEvents()
     }
@@ -16,7 +17,6 @@ export default class DOM {
         const project = this.projectManager.getProjects().find(project => 
             project.todos.some(todo => todo.title === todoTitle)
         )
-        console.log(todoTitle, project)
         this.selectedProject = project
         this.editFields(todoItem)
     }
@@ -31,15 +31,40 @@ export default class DOM {
         todoDuedateField.value = todoItem.dueDate
         this.getTodoPriority(todoItem.priority)
 
-        this.addTaskBtn.classList.add('edit')
-        if (this.addTaskBtn.classList.contains('edit')) {
+        if (!this.addTaskBtn.classList.contains('edit')) {
+            this.addTaskBtn.classList.add('edit')
             this.addTaskBtn.textContent = 'Edit Task'
-            this.addTaskBtn.addEventListener('click', () => {
-                this.saveEditedTask(todoItem)
-            })  
+            this.addTaskBtn.removeEventListener('click', this.addTask)
+            this.addTaskBtn.addEventListener('click', () => this.saveEditedTask(todoItem))  
         }
+
         this.showModal()
     }
+
+
+    saveEditedTask(todoItem) {
+        const todoTitleField = document.querySelector('#title')
+        const todoDescriptionField = document.querySelector('#description')
+        const todoDuedateField = document.querySelector('#duedate')
+        
+        todoItem.title = todoTitleField.value.trim()
+        todoItem.description = todoDescriptionField.value.trim()
+        todoItem.dueDate = todoDuedateField.value.trim()
+        todoItem.priority = this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
+
+        const project = this.selectedProject
+
+        if (project) {
+            const todoIndex = project.todos.findIndex(todo => todo === todoItem)
+            if (todoIndex !== -1) {
+                project.todos[todoIndex] = todoItem
+                console.log(todoIndex, todoItem)
+            }
+        }
+
+        this.closeModal()
+        this.getCurrentTab()
+    } 
 
     getTodoPriority(priorityValue) {
         const priorityBtns = document.querySelectorAll('.priority button')
@@ -54,25 +79,6 @@ export default class DOM {
         })
     } //
 
-    // saveEditedTask(todoItem) {
-    //     const todoTitleField = document.querySelector('#title')
-    //     const todoDescriptionField = document.querySelector('#description')
-    //     const todoDuedateField = document.querySelector('#duedate')
-        
-    //     todoItem.title = todoTitleField.value.trim()
-    //     todoItem.description = todoDescriptionField.value.trim()
-    //     todoItem.dueDate = todoDuedateField.value.trim()
-    //     todoItem.priority = this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
-
-    //     const project = this.projectManager.getProjects().find(project => 
-    //         project.todos.some(todo => todo.title === todoItem.title)
-    //     )
-
-    //     if (project) {
-    //         con
-    //     }
-
-    // } 
 
     setPriority(e) {
         if (e.target.tagName === "BUTTON") {
@@ -91,6 +97,7 @@ export default class DOM {
         if (e.target.tagName === 'LI') {
             const projectName = e.target.textContent
             this.selectedProject = projectName
+            this.currentTab = projectName
             this.displayProjectTodos(projectName)
         }
     }
@@ -252,11 +259,18 @@ export default class DOM {
     } //
 
     navigateItem(e) {
-        const item = e.target.textContent
-        if (item === 'Home') this.loadHome()
-        else if (item === 'Today') this.loadToday()
-        else if (item === 'Week') this.loadWeek()
-        else return
+        this.currentTab = e.target.textContent
+        this.getCurrentTab()
+    }
+
+    getCurrentTab = () => {
+        console.log(this.currentTab)
+        switch (this.currentTab) {
+            case 'Home': this.loadHome(); break
+            case 'Today': this.loadToday(); break
+            case 'Week': this.loadWeek(); break
+            default: this.displayProjectTodos(this.currentTab); break
+        }
     }
 
     loadHome() {
@@ -340,7 +354,7 @@ export default class DOM {
     }
 
     showModal = () => this.modal.style.display = 'block' 
-    closeModal = () => this.modal.style.display = 'none'
+    closeModal = () => {this.modal.style.display = 'none'}
     cacheDomElements = () => {
          this.sidebar = document.querySelector('.sidebar')
          this.addProjectBtn = document.querySelector('.add-project.btn')
