@@ -80,4 +80,5 @@ export default class ProjectManager {
             return allTodos.concat(project.todos)
         }, [])
     }
+    
 }

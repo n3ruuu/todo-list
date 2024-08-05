@@ -20,19 +20,27 @@ export default class DOM {
     }
 
     showEditModal(todoItem) {
-        const todoTitleField = document.querySelector('#title')
-        const todoDescriptionField = document.querySelector('#description')
-        const todoDuedateField = document.querySelector('#duedate')
-
-        todoTitleField.value = todoItem.title
-        todoDescriptionField.value = todoItem.description
-        todoDuedateField.value = todoItem.dueDate
+        this.assignValues(todoItem)
         this.getPrioritySelect(todoItem.priority)
-        this.toggleTaskButton(this.addTaskBtn, true)
+        this.replaceAddToEdit(this.addTaskBtn, true)
         this.showModal()
     }
 
-    toggleTaskButton(button, isEditing) {
+    assignValues = (todoItem) => {
+        const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
+        todoTitleField.value = todoItem.title
+        todoDescriptionField.value = todoItem.description
+        todoDuedateField.value = todoItem.dueDate
+    }
+
+    getInputFields = () => {
+        const todoTitleField = document.querySelector('#title')
+        const todoDescriptionField = document.querySelector('#description')
+        const todoDuedateField = document.querySelector('#duedate')
+        return { todoTitleField, todoDescriptionField, todoDuedateField }
+    }
+
+    replaceAddToEdit(button, isEditing) {
         button.removeEventListener('click', this.addTask)
         button.removeEventListener('click', this.saveEditedTask)
     
@@ -48,9 +56,7 @@ export default class DOM {
     
 
     saveEditedTask(todoItem) {
-        const todoTitleField = document.querySelector('#title')
-        const todoDescriptionField = document.querySelector('#description')
-        const todoDuedateField = document.querySelector('#duedate')
+        const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
         
         todoItem.title = todoTitleField.value.trim()
         todoItem.description = todoDescriptionField.value.trim()
@@ -210,7 +216,7 @@ export default class DOM {
         })
     }
 
-    showInputField() {
+    showProjectInputField() {
         if (!this.projectInput) {
             this.projectInput = this.createInputField()
             this.projectList.appendChild(this.projectInput)
@@ -233,7 +239,7 @@ export default class DOM {
                 this.appendProject(projectName)
             }
             e.target.value = ''
-            this.hideInputField()
+            this.hideProjectInputField()
         }
     } //
 
@@ -256,10 +262,10 @@ export default class DOM {
         const li = document.createElement('li')
         li.textContent = projectName
         this.projectList.appendChild(li)
-        this.hideInputField()
+        this.hideProjectInputField()
     } //
 
-    hideInputField() {
+    hideProjectInputField() {
         if (this.projectInput) {
             this.projectInput.remove();
             this.projectInput = null
@@ -375,7 +381,7 @@ export default class DOM {
         this.clearInputFields()
         this.getPrioritySelect()
     }
-    
+
     cacheDomElements = () => {
          this.sidebar = document.querySelector('.sidebar')
          this.addProjectBtn = document.querySelector('.add-project.btn')
@@ -394,10 +400,14 @@ export default class DOM {
                 this.editTodo(e)
             }
         })
-        this.sidebarItems.forEach(item => item.addEventListener('click', this.navigateItem.bind(this)))
+        
+        this.sidebarItems.forEach(item => {
+            item.addEventListener('click', this.navigateItem.bind(this))
+        })
+        
         this.priorityBtn.addEventListener('click', this.setPriority.bind(this))
         this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
-        this.addProjectBtn.addEventListener('click', this.showInputField.bind(this))
+        this.addProjectBtn.addEventListener('click', this.showProjectInputField.bind(this))
         this.exitBtn.addEventListener('click', this.closeModal.bind(this))
         this.addTaskBtn.addEventListener('click', (e) => this.addTask(e))
     }
