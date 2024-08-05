@@ -55,23 +55,27 @@ export default class ProjectManager {
         ]  
     }
 
-    getProjects() {
-        return this.projects
+    getProjects = () => this.projects
+
+    findProject = (todoTitle) => {
+        return this.projects.find(project => {
+            return project.todos.some(todo => todo.title === todoTitle)
+        })
     }
 
-    getTodosByTitle(title) {
+    getTodosByTitle = (title) => {
         const project = this.projects.find(p => p.title === title)
         return project ? project.todos : []
     }
 
-    getTodoItem(title) {
+    getTodoItem = (title) => {
         for (const project of this.projects) {
             const todo = project.todos.find(todo => todo.title === title)
             if (todo) return todo
         }
     }
 
-    getAllTodos() {
+    getAllTodos = () => {
         return this.projects.reduce((allTodos, project) => {
             return allTodos.concat(project.todos)
         }, [])
