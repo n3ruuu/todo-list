@@ -29,7 +29,6 @@ export default class DOM {
         todoDuedateField.value = todoItem.dueDate
         this.getPrioritySelect(todoItem.priority)
         this.toggleTaskButton(this.addTaskBtn, true)
-        console.log(this.addTaskBtn)
         this.showModal()
     }
 
@@ -38,12 +37,12 @@ export default class DOM {
         button.removeEventListener('click', this.saveEditedTask)
     
         if (isEditing) {
+            console.log('Editing Task')
             button.textContent = 'Edit Task'
             button.addEventListener('click', this.saveEditedTask.bind(this))
         } else {
+            console.log('Adding task')
             button.textContent = 'Add Task'
-            button.addEventListener('click', this.addTask.bind(this))
-            this.clearInputFields()
         }
     }
     
@@ -107,9 +106,9 @@ export default class DOM {
         const contentDiv = document.querySelector('.content')
         const header = document.querySelector('.content h1')
         const todosContainer = document.querySelector('.todos-container')
-
+    
         this.clearTodos()
-        
+    
         if (projectName) {
             const todos = this.projectManager.getTodosByTitle(projectName)
             header.textContent = projectName
@@ -118,15 +117,20 @@ export default class DOM {
                 this.addTodoBtn = this.createAddTodoButton()
                 contentDiv.insertBefore(this.addTodoBtn, todosContainer)
             }
+    
             todos.forEach(todo => this.createTodoContainer(todo))   
         }
-    } //
-
+    }
+    
+    
     createAddTodoButton() {
         const button = document.createElement('button')
         button.className = 'add-todo btn'
         button.textContent = 'Add Todo'
-        button.addEventListener('click', () => this.showModal())
+        console.log('Todo button created')
+        button.addEventListener('click', (e) => {
+            this.showModal()
+        })
         return button
     } //
 
@@ -172,7 +176,6 @@ export default class DOM {
 
     addTask(e) {
         e.preventDefault()
-        console.log('Adding Task')
         const todoTitle = document.querySelector('#title').value
         const todoDescription = document.querySelector('#description').value
         const todoDuedate = document.querySelector('#duedate').value
@@ -362,16 +365,21 @@ export default class DOM {
         todosContainer.innerHTML = ''
     }
 
-    showModal = () => this.modal.style.display = 'block' 
+    showModal = () => {
+        this.modal.style.display = 'block' 
+        console.log('Modal open')
+    }
+
     closeModal = () => {
         this.modal.style.display = 'none'
-        this.toggleTaskButton(this.addTaskBtn, false)
+        this.clearInputFields()
+        this.getPrioritySelect()
     }
+    
     cacheDomElements = () => {
          this.sidebar = document.querySelector('.sidebar')
          this.addProjectBtn = document.querySelector('.add-project.btn')
          this.projectList = document.querySelector('ul')
-         this.addTodoBtn = document.querySelector('.add-todo.btn')
          this.addTaskBtn = document.querySelector('.add-task.btn')
          this.modal = document.querySelector('.modal')
          this.exitBtn = document.querySelector('.exit')
@@ -390,7 +398,7 @@ export default class DOM {
         this.priorityBtn.addEventListener('click', this.setPriority.bind(this))
         this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
         this.addProjectBtn.addEventListener('click', this.showInputField.bind(this))
-        this.addTaskBtn.addEventListener('click', () => this.toggleTaskButton(this.addTaskBtn, false))
         this.exitBtn.addEventListener('click', this.closeModal.bind(this))
+        this.addTaskBtn.addEventListener('click', (e) => this.addTask(e))
     }
 }
