@@ -22,7 +22,7 @@ export default class DOM {
     showEditModal(todoItem) {
         this.assignValues(todoItem)
         this.getPrioritySelect(todoItem.priority)
-        this.replaceAddToEdit(this.addTaskBtn, true)
+        this.replaceAddToEdit(this.addTaskBtn, true, todoItem)
         this.showModal()
     }
 
@@ -40,14 +40,14 @@ export default class DOM {
         return { todoTitleField, todoDescriptionField, todoDuedateField }
     }
 
-    replaceAddToEdit(button, isEditing) {
+    replaceAddToEdit(button, isEditing, todoItem) {
         button.removeEventListener('click', this.addTask)
         button.removeEventListener('click', this.saveEditedTask)
     
         if (isEditing) {
             console.log('Editing Task')
             button.textContent = 'Edit Task'
-            button.addEventListener('click', this.saveEditedTask.bind(this))
+            button.addEventListener('click', (e) => this.saveEditedTask(e, todoItem))
         } else {
             console.log('Adding task')
             button.textContent = 'Add Task'
@@ -55,21 +55,38 @@ export default class DOM {
     }
     
 
-    saveEditedTask(todoItem) {
+    saveEditedTask(e, todoItem) {
+        e.preventDefault()
         const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
-        
-        todoItem.title = todoTitleField.value.trim()
-        todoItem.description = todoDescriptionField.value.trim()
-        todoItem.dueDate = todoDuedateField.value.trim()
-        todoItem.priority = this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
+        this.getPrioritySelect(todoItem.priority)
 
-        console.log(todoItem, this.selectedProject)
+        const index = this.selectedProject.todos.findIndex(todo => todo === todoItem)
+        if (index !== -1) {
+            console.log('Saving edited task for ', todoItem)
 
+            this.selectedProject.todos[index] = {
+                title: todoTitleField.value.trim(),
+                description: todoDescriptionField.value.trim(),
+                dueDate: todoDuedateField.value.trim(),
+                priority: this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
+            }
 
+            this.updateTodoPriorityColor(this.selectedProject.todos[index])
+        }
 
         this.closeModal()
         this.getCurrentTab()
     } 
+
+    updateTodoPriorityColor(updatedTodoItem) {
+        const todoContainers = document.querySelectorAll('.item-container')
+        todoContainers.forEach(container => {
+            const titleElement = container.querySelector('.title')
+            if (titleElement && titleElement.textContent.trim() === updatedTodoItem.title) {
+                this.setPriorityColor(container, updatedTodoItem.priority)
+            }
+        })
+    }
 
     getPrioritySelect(priorityValue) {
         const priorityBtns = document.querySelectorAll('.priority button')
@@ -128,7 +145,6 @@ export default class DOM {
         }
     }
     
-    
     createAddTodoButton() {
         const button = document.createElement('button')
         button.className = 'add-todo btn'
@@ -136,6 +152,7 @@ export default class DOM {
         console.log('Todo button created')
         button.addEventListener('click', (e) => {
             this.showModal()
+            this.clearInputFields()
         })
         return button
     } //
@@ -378,7 +395,6 @@ export default class DOM {
 
     closeModal = () => {
         this.modal.style.display = 'none'
-        this.clearInputFields()
         this.getPrioritySelect()
     }
 
@@ -404,7 +420,7 @@ export default class DOM {
         this.sidebarItems.forEach(item => {
             item.addEventListener('click', this.navigateItem.bind(this))
         })
-        
+
         this.priorityBtn.addEventListener('click', this.setPriority.bind(this))
         this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
         this.addProjectBtn.addEventListener('click', this.showProjectInputField.bind(this))
