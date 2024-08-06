@@ -20,30 +20,27 @@ export default class DOM {
     }
 
     showEditModal(todoItem) {
-        this.assignValues(todoItem)
+        const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
+        todoTitleField.value = todoItem.title
+        todoDescriptionField.value = todoItem.description
+        todoDuedateField.value = todoItem.dueDate
         this.getPrioritySelect(todoItem.priority)
         this.replaceAddToEdit(this.addTaskBtn, true, todoItem)
         this.showModal()
     }
 
-    assignValues = (todoItem) => {
-        const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
-        todoTitleField.value = todoItem.title
-        todoDescriptionField.value = todoItem.description
-        todoDuedateField.value = todoItem.dueDate
-    }
-
     getInputFields = () => {
-        const todoTitleField = document.querySelector('#title')
-        const todoDescriptionField = document.querySelector('#description')
-        const todoDuedateField = document.querySelector('#duedate')
-        return { todoTitleField, todoDescriptionField, todoDuedateField }
+        return {
+            todoTitleField: document.querySelector('#title'),
+            todoDescriptionField: document.querySelector('#description'),
+            todoDuedateField: document.querySelector('#duedate'),
+        }
     }
 
     replaceAddToEdit(button, isEditing, todoItem) {
-        button.removeEventListener('click', this.addTask)
-        button.removeEventListener('click', this.saveEditedTask)
-    
+        button.removeEventListener('click', (e) => this.addTask(e))
+        button.removeEventListener('click', (e) => this.saveEditedTask(e, todoItem))
+
         if (isEditing) {
             console.log('Editing Task')
             button.textContent = 'Edit Task'
@@ -51,14 +48,16 @@ export default class DOM {
         } else {
             console.log('Adding task')
             button.textContent = 'Add Task'
+            button.addEventListener('click', (e) => this.addTask(e))
         }
     }
-    
 
     saveEditedTask(e, todoItem) {
         e.preventDefault()
         const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
-        this.getPrioritySelect(todoItem.priority)
+        const newPriority = this.selectedPriority 
+            ? this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
+            :todoItem.priority
 
         const index = this.selectedProject.todos.findIndex(todo => todo === todoItem)
         if (index !== -1) {
@@ -68,7 +67,7 @@ export default class DOM {
                 title: todoTitleField.value.trim(),
                 description: todoDescriptionField.value.trim(),
                 dueDate: todoDuedateField.value.trim(),
-                priority: this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
+                priority: newPriority
             }
 
             this.updateTodoPriorityColor(this.selectedProject.todos[index])
@@ -126,41 +125,29 @@ export default class DOM {
     }
 
     displayProjectTodos(projectName) {
-        const contentDiv = document.querySelector('.content')
         const header = document.querySelector('.content h1')
-        const todosContainer = document.querySelector('.todos-container')
-    
         this.clearTodos()
-    
         if (projectName) {
-            const todos = this.projectManager.getTodosByTitle(projectName)
             header.textContent = projectName
-            
-            if (!this.addTodoBtn) {
-                this.addTodoBtn = this.createAddTodoButton()
-                contentDiv.insertBefore(this.addTodoBtn, todosContainer)
-            }
-    
-            todos.forEach(todo => this.createTodoContainer(todo))   
+            const todos = this.projectManager.getTodosByTitle(projectName)
+            todos.forEach(todo => this.createTodoContainer(todo))
         }
+        this.createAddTodoButton()
     }
     
-    createAddTodoButton() {
-        const button = document.createElement('button')
-        button.className = 'add-todo btn'
-        button.textContent = 'Add Todo'
-        console.log('Todo button created')
-        button.addEventListener('click', (e) => {
-            this.showModal()
-            this.clearInputFields()
-        })
-        return button
-    } //
 
     createTodoContainer(todo) {
         const todosContainer = document.querySelector('.todos-container')
-        const itemContainer = document.createElement('div')
-        itemContainer.className = 'item-container'
+        const titles = todosContainer.querySelectorAll('.title')
+        for (const titleElement of titles) {
+            if (titleElement.textContent.trim() === todo.title) {
+                console.log('Todo already exists')
+                return // Prevent adding duplicate todos
+            }
+        }
+
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'item-container';
         itemContainer.innerHTML = ` <span class="circle"></span>
                                     <div class="text-container">
                                         <header class="todo-header">
@@ -176,11 +163,11 @@ export default class DOM {
                                         </header>
                                         <div class="description">${todo.description}</div>
                                         <div class="duedate">${todo.dueDate}</div>
-                                    </div>`
-        todosContainer.appendChild(itemContainer)
-        this.setPriorityColor(itemContainer, todo.priority)
+                                    </div>`;
+        todosContainer.appendChild(itemContainer);
+        this.setPriorityColor(itemContainer, todo.priority);
     }
-
+    
     setPriorityColor(container, value) {
         const circle = container.querySelector('.circle')
         if (circle) {
@@ -199,18 +186,15 @@ export default class DOM {
 
     addTask(e) {
         e.preventDefault()
-        const todoTitle = document.querySelector('#title').value
-        const todoDescription = document.querySelector('#description').value
-        const todoDuedate = document.querySelector('#duedate').value
+        const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
         const priority = this.selectedPriority
-        console.log(priority)
 
-        if (!todoTitle || !todoDescription || !todoDuedate) {
+        if (!todoTitleField.value || !todoDescriptionField.value || !todoDuedateField.value) {
             alert('Please fill in all fields.')
             return
         }
 
-        const newTodo = new Todo(todoTitle, todoDescription, todoDuedate, priority)
+        const newTodo = new Todo(todoTitleField.value.trim(), todoDescriptionField.value.trim(), todoDuedateField.value.trim(), priority)
         const todos = this.projectManager.getTodosByTitle(this.selectedProject)
         todos.push(newTodo)
         this.closeModal()
@@ -221,7 +205,7 @@ export default class DOM {
         document.querySelector('#title').value = ''
         document.querySelector('#description').value = ''
         document.querySelector('#duedate').value = ''
-        console.log('cleared')
+        console.log('Cleared input fields')
     }
 
     displayProjects() {
@@ -233,6 +217,21 @@ export default class DOM {
         })
     }
 
+    createAddTodoButton() {
+        const todosContainer = document.querySelector('.todos-container')
+
+        if (this.addTodoBtn) return
+        this.addTodoBtn = document.createElement('button');
+        this.addTodoBtn.className = 'add-todo btn';
+        this.addTodoBtn.textContent = 'Add Todo';
+        this.addTodoBtn.addEventListener('click', () => {
+            this.replaceAddToEdit(this.addTaskBtn, false, null)
+            this.showModal()
+            this.clearInputFields()
+        })
+        document.querySelector('.content').insertBefore(this.addTodoBtn, todosContainer);
+    }
+    
     showProjectInputField() {
         if (!this.projectInput) {
             this.projectInput = this.createInputField()
@@ -383,15 +382,9 @@ export default class DOM {
         }
     }
 
-    clearTodos = () => {
-        const todosContainer = document.querySelector('.todos-container')
-        todosContainer.innerHTML = ''
-    }
+    clearTodos = () => document.querySelector('.todos-container').innerHTML = '';
 
-    showModal = () => {
-        this.modal.style.display = 'block' 
-        console.log('Modal open')
-    }
+    showModal = () => this.modal.style.display = 'block' 
 
     closeModal = () => {
         this.modal.style.display = 'none'
@@ -425,6 +418,5 @@ export default class DOM {
         this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
         this.addProjectBtn.addEventListener('click', this.showProjectInputField.bind(this))
         this.exitBtn.addEventListener('click', this.closeModal.bind(this))
-        this.addTaskBtn.addEventListener('click', (e) => this.addTask(e))
     }
 }
