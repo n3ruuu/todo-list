@@ -321,7 +321,14 @@ span,
     gap: 10px;
 }
 
-.svg {
+.project-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.svg,
+.delete-btn,
+img {
     width: 30px;
     height: 30px;
 }

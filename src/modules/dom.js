@@ -11,6 +11,15 @@ export default class DOM {
         this.bindEvents()
     }
 
+    loadProjects() {
+        this.displayProjects()
+        this.getCurrentTab() // Optionally load the current tab's content
+    }
+
+    saveProjects() {
+        this.projectManager.saveProjects() // Save projects to local storage
+    }
+
     editTodo = (e) => {
         const todoTitle = e.target.closest('.todo-header').textContent.trim()
         const todoItem = this.projectManager.getTodoItem(todoTitle)
@@ -34,7 +43,7 @@ export default class DOM {
         const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
         const newPriority = this.selectedPriority 
             ? this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
-            :todoItem.priority
+            : todoItem.priority
 
         const index = this.selectedProject.todos.findIndex(todo => todo === todoItem)
         if (index !== -1) {
@@ -52,6 +61,7 @@ export default class DOM {
 
         this.closeModal()
         this.getCurrentTab()
+        this.saveProjects()
     } 
 
     deleteTodo = (e) => {
@@ -61,6 +71,7 @@ export default class DOM {
         if (todoIndex !== -1) {
             this.selectedProject.todos.splice(todoIndex, 1)
             this.getCurrentTab()
+            this.saveProjects()
         }
     }
 
@@ -225,6 +236,7 @@ export default class DOM {
         todos.push(newTodo)
         this.closeModal()
         this.displayProjectTodos(this.selectedProject)
+        this.saveProjects()
     }
 
     clearInputFields = () => {
@@ -233,15 +245,32 @@ export default class DOM {
         document.querySelector('#duedate').value = ''
         console.log('Cleared input fields')
     }
-
+    
     displayProjects = () => {
-        const projects = this.projectManager.getProjects()
+        const projects = this.projectManager.getProjects();
+        this.projectList.innerHTML = ''; // Clear the existing project list
+    
         projects.forEach(project => {
-            const li = document.createElement('li')
-            li.textContent = project.title
-            this.projectList.append(li)
-        })
+            this.createListElement(project.title); // Create list elements for all projects
+        });
     }
+    
+
+    deleteProject = (projectTitle) => {
+        const confirmed = confirm(`Are you sure you want to delete the project "${projectTitle}"?`);
+        if (confirmed) {
+            // Remove project from the project manager
+            this.projectManager.projects = this.projectManager.projects.filter(project => project.title !== projectTitle);
+            // Save the updated project list to local storage
+            this.projectManager.saveProjects()
+            this.saveProjects()
+            // Refresh the project list display
+            this.displayProjects()
+            this.loadHome()
+        }
+    }
+    
+    
 
     createAddTodoButton = () => {
         const todosContainer = document.querySelector('.todos-container')
@@ -272,8 +301,10 @@ export default class DOM {
         input.className = 'project-input'
         input.type = 'text'
         input.addEventListener('keydown', this.handleInputKeyDown.bind(this))
+        input.addEventListener('blur', () => this.hideProjectInputField())
         return input
     } //
+
 
     handleInputKeyDown = (e) => {
         const projectName = e.target.value.trim();
@@ -298,15 +329,34 @@ export default class DOM {
     appendProject = (projectName) => { 
         const newProject = new Project(projectName)
         this.projectManager.projects.push(newProject)
-        this.createListElement(projectName)        
+        this.createListElement(projectName)
     } //
 
     createListElement = (projectName) => {
         const li = document.createElement('li')
-        li.textContent = projectName
-        this.projectList.appendChild(li)
-        this.hideProjectInputField()
-    } //
+        li.className = 'project-item'
+        
+        // Create project title element
+        const title = document.createElement('span')
+        title.textContent = projectName
+        title.className = 'project-title'
+    
+        // Create delete button element
+        const deleteBtn = document.createElement('svg')
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '<img src="./assets/delete.svg" alt="Delete">'; // Replace with your delete image path
+    
+        // Append title and delete button to list item
+        li.appendChild(title);
+        li.appendChild(deleteBtn);
+    
+        // Append list item to project list
+        this.projectList.appendChild(li);
+    
+        // Add event listener to delete button
+        deleteBtn.addEventListener('click', () => this.deleteProject(projectName));
+    }
+    
 
     hideProjectInputField = () => {
         if (this.projectInput) {

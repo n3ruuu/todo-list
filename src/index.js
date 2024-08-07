@@ -6,5 +6,5 @@ const init = (() => {
     const domManager = new DOM(projectManager)
 
     domManager.loadHome()
-    domManager.displayProjects()
+    domManager.loadProjects()
 })()

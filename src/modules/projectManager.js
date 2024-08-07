@@ -1,58 +1,65 @@
+import Storage from './storage.js';
+
 export default class ProjectManager {
     constructor() {
-        this.projects = [
-            { 
-                title: 'Project 1', 
-                todos: [
-                    {
-                        title: 'Todo 1',
-                        description: "Description 1",
-                        dueDate: '2024-08-02', 
-                        priority: "High"
-                    },
-                    {
-                        title: 'Todo 2',
-                        description: "Description 2",
-                        dueDate: '2024-07-31', 
-                        priority: "Medium"
-                    },    
-                ]
-            }, 
-            { 
-                title: 'Project 2', 
-                todos: [
-                    {
-                        title: 'Todo 3',
-                        description: "Description 3",
-                        dueDate: '2024-07-31', 
-                        priority: "Low"
-                    },
-                    {
-                        title: 'Todo 4',
-                        description: "Description 4",
-                        dueDate: '2024-07-31', 
-                        priority: "High"
-                    }
-                ] 
-            }, 
-            { 
-                title: 'Project 3', 
-                todos: [
-                    {
-                        title: 'Todo 5',
-                        description: "Description 5",
-                        dueDate: '2024-07-31', 
-                        priority: "Medium"
-                    },    
-                    {
-                        title: 'Todo 6',
-                        description: "Description 6",
-                        dueDate: '2024-07-31', 
-                        priority: "Low"
-                    }    
-                ]
-            }, 
-        ]  
+        this.projects = Storage.loadProjects() // Load projects from local storage initially
+        if (this.projects.length === 0) {
+            // If no projects are loaded, initialize with default projects
+            this.projects = [
+                { 
+                    title: 'Project 1', 
+                    todos: [
+                        {
+                            title: 'Todo 1',
+                            description: "Description 1",
+                            dueDate: '2024-08-02', 
+                            priority: "High"
+                        },
+                        {
+                            title: 'Todo 2',
+                            description: "Description 2",
+                            dueDate: '2024-07-31', 
+                            priority: "Medium"
+                        }
+                    ]
+                }, 
+                { 
+                    title: 'Project 2', 
+                    todos: [
+                        {
+                            title: 'Todo 3',
+                            description: "Description 3",
+                            dueDate: '2024-07-31', 
+                            priority: "Low"
+                        },
+                        {
+                            title: 'Todo 4',
+                            description: "Description 4",
+                            dueDate: '2024-07-31', 
+                            priority: "High"
+                        }
+                    ] 
+                }, 
+                { 
+                    title: 'Project 3', 
+                    todos: [
+                        {
+                            title: 'Todo 5',
+                            description: "Description 5",
+                            dueDate: '2024-07-31', 
+                            priority: "Medium"
+                        },    
+                        {
+                            title: 'Todo 6',
+                            description: "Description 6",
+                            dueDate: '2024-07-31', 
+                            priority: "Low"
+                        }    
+                    ]
+                }
+            ];
+            this.saveProjects()
+        }
     }
 
     getProjects = () => this.projects
@@ -80,5 +87,8 @@ export default class ProjectManager {
             return allTodos.concat(project.todos)
         }, [])
     }
-    
+
+    saveProjects = () => {
+        Storage.saveProjects(this.projects); // Save the projects to local storage
+    }
 }
