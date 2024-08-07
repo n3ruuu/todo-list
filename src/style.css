@@ -167,6 +167,7 @@ span,
     padding: 0 8px;
     width: 80px;
     cursor: pointer;
+    border: 1px solid transparent;
 }
 
 #low {
@@ -203,6 +204,18 @@ span,
 #high.active {
     color: white;
     background-color: red;
+}
+
+.high-priority.shaded {
+    background-color: red;
+}
+
+.medium-priority.shaded {
+    background-color: orange;
+}
+
+.low-priority.shaded {
+    background-color: green;
 }
 
 .add-task.btn {
