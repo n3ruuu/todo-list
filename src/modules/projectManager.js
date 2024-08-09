@@ -12,7 +12,7 @@ export default class ProjectManager {
                         {
                             title: 'Todo 1',
                             description: "Description 1",
-                            dueDate: '2024-08-02', 
+                            dueDate: '2024-08-08', 
                             priority: "High",
                             completed: false
                             
@@ -20,7 +20,7 @@ export default class ProjectManager {
                         {
                             title: 'Todo 2',
                             description: "Description 2",
-                            dueDate: '2024-07-31', 
+                            dueDate: '2024-08-14', 
                             priority: "Medium",
                             completed: false
                         }
@@ -32,14 +32,14 @@ export default class ProjectManager {
                         {
                             title: 'Todo 3',
                             description: "Description 3",
-                            dueDate: '2024-07-31', 
+                            dueDate: '2024-08-10', 
                             priority: "Low",
                             completed: false
                         },
                         {
                             title: 'Todo 4',
                             description: "Description 4",
-                            dueDate: '2024-07-31', 
+                            dueDate: '2024-08-12', 
                             priority: "High",
                             completed: false
                         }
@@ -51,14 +51,14 @@ export default class ProjectManager {
                         {
                             title: 'Todo 5',
                             description: "Description 5",
-                            dueDate: '2024-07-31', 
+                            dueDate: '2024-08-13', 
                             priority: "Medium",
                             completed: false
                         },    
                         {
                             title: 'Todo 6',
                             description: "Description 6",
-                            dueDate: '2024-07-31', 
+                            dueDate: '2024-08-14', 
                             priority: "Low",
                             completed: false
                         }    
@@ -96,6 +96,6 @@ export default class ProjectManager {
     }
 
     saveProjects = () => {
-        Storage.saveProjects(this.projects); // Save the projects to local storage
+        Storage.saveProjects(this.projects)
     }
 }

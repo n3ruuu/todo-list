@@ -55,16 +55,17 @@ input {
     margin: 10px;
 }
 
-li {
+li span {
     cursor: pointer;
     list-style-type: none;
     padding: 5px 0;
 }
 
-li:hover,
+li span:hover,
 .items .item:hover {
     background-color: var(--hover-clr);
     padding-left: 20px;
+    padding-right: 10px;
     border-radius: 5px;
 }
 

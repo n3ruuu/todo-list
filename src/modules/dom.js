@@ -13,11 +13,11 @@ export default class DOM {
 
     loadProjects() {
         this.displayProjects()
-        this.getCurrentTab() // Optionally load the current tab's content
+        this.getCurrentTab()
     }
 
     saveProjects() {
-        this.projectManager.saveProjects() // Save projects to local storage
+        this.projectManager.saveProjects()
     }
 
     editTodo = (e) => {
@@ -137,7 +137,8 @@ export default class DOM {
     }
 
     handleProjectClick = (e) => {
-        if (e.target.tagName === 'LI') {
+        console.log('sadjasdio')
+        if (e.target.tagName === 'SPAN') {
             const projectName = e.target.textContent
             this.selectedProject = projectName
             this.currentTab = projectName
@@ -157,6 +158,7 @@ export default class DOM {
     }
 
     createTodoContainer = (todo) => {
+        console.log('Creating todo container')
         const todosContainer = document.querySelector('.todos-container')
         const titles = todosContainer.querySelectorAll('.title')
         for (const titleElement of titles) {
@@ -183,28 +185,28 @@ export default class DOM {
                                         </header>
                                         <div class="description">${todo.description}</div>
                                         <div class="duedate">${todo.dueDate}</div>
-                                    </div>`;
+                                    </div>`
         todosContainer.appendChild(itemContainer)
         this.setPriorityColor(itemContainer, todo.priority)
 
-        const circle = itemContainer.querySelector('.circle');
+        const circle = itemContainer.querySelector('.circle')
         if (circle) {
             if (todo.completed) {
-                circle.classList.add('shaded');
-                itemContainer.querySelector('.text-container').style.textDecoration = 'line-through';
+                circle.classList.add('shaded')
+                itemContainer.querySelector('.text-container').style.textDecoration = 'line-through'
             }
             circle.addEventListener('click', () => {
-                circle.classList.toggle('shaded');
-                this.checkIfDone(circle, itemContainer);
-                const isShaded = circle.classList.contains('shaded');
-                const title = itemContainer.querySelector('.title').textContent.trim();
-                const project = this.projectManager.findProject(title);
-                const todoItem = project.todos.find(t => t.title === title);
+                circle.classList.toggle('shaded')
+                this.checkIfDone(circle, itemContainer)
+                const isShaded = circle.classList.contains('shaded')
+                const title = itemContainer.querySelector('.title').textContent.trim()
+                const project = this.projectManager.findProject(title)
+                const todoItem = project.todos.find(t => t.title === title)
                 if (todoItem) {
-                    todoItem.completed = isShaded;
-                    this.saveProjects(); // Save the state after toggling
+                    todoItem.completed = isShaded
+                    this.saveProjects() // Save the state after toggling
                 }
-            });
+            })
         }
     }
 
@@ -259,24 +261,21 @@ export default class DOM {
     }
     
     displayProjects = () => {
-        const projects = this.projectManager.getProjects();
-        this.projectList.innerHTML = ''; // Clear the existing project list
+        const projects = this.projectManager.getProjects()
+        this.projectList.innerHTML = '' // Clear the existing project list
     
         projects.forEach(project => {
-            this.createListElement(project.title); // Create list elements for all projects
-        });
+            this.createListElement(project.title) // Create list elements for all projects
+        })
     }
     
 
     deleteProject = (projectTitle) => {
-        const confirmed = confirm(`Are you sure you want to delete the project "${projectTitle}"?`);
+        const confirmed = confirm(`Are you sure you want to delete the project "${projectTitle}"?`)
         if (confirmed) {
-            // Remove project from the project manager
-            this.projectManager.projects = this.projectManager.projects.filter(project => project.title !== projectTitle);
-            // Save the updated project list to local storage
+            this.projectManager.projects = this.projectManager.projects.filter(project => project.title !== projectTitle)
             this.projectManager.saveProjects()
             this.saveProjects()
-            // Refresh the project list display
             this.displayProjects()
             this.loadHome()
         }
@@ -288,103 +287,96 @@ export default class DOM {
         const todosContainer = document.querySelector('.todos-container')
 
         if (this.addTodoBtn) return
-        this.addTodoBtn = document.createElement('button');
-        this.addTodoBtn.className = 'add-todo btn';
-        this.addTodoBtn.textContent = 'Add Todo';
+        this.addTodoBtn = document.createElement('button')
+        this.addTodoBtn.className = 'add-todo btn'
+        this.addTodoBtn.textContent = 'Add Todo'
         this.addTodoBtn.addEventListener('click', () => {
             this.replaceAddToEdit(this.addTaskBtn, false, null)
             this.showModal()
             this.clearInputFields()
         })
         
-        document.querySelector('.content').insertBefore(this.addTodoBtn, todosContainer);
+        document.querySelector('.content').insertBefore(this.addTodoBtn, todosContainer)
     }
     
     showProjectInputField = () => {
+        // if project input field does not exist, create it
         if (!this.projectInput) {
             this.projectInput = this.createInputField()
             this.projectList.appendChild(this.projectInput)
             this.projectInput.focus()
         } 
-    } //
+    } 
 
-    createInputField() {
+    createInputField = () => {
         const input = document.createElement('input')
         input.className = 'project-input'
         input.type = 'text'
-        input.addEventListener('keydown', this.handleInputKeyDown.bind(this))
+        input.addEventListener('keydown', () => this.handleInputKeyDown.bind(this))
         input.addEventListener('blur', () => this.hideProjectInputField())
         return input
-    } //
-
+    } 
 
     handleInputKeyDown = (e) => {
-        const projectName = e.target.value.trim();
+        const projectName = e.target.value.trim()
         if (e.key === `Enter` && projectName !== '') {
             if (this.isValid(projectName)) {
                 this.appendProject(projectName)
+                this.saveProjects()
             }
             e.target.value = ''
             this.hideProjectInputField()
         }
-    } //
+    }
 
     isValid = (name) => {
         if (name === '') return false
-        if (this.checkIfExists(name)) {
+        if (this.isExisting(name)) {
             alert('Duplicate')
             return false
         }
         return true
-    } //
+    } 
 
     appendProject = (projectName) => { 
         const newProject = new Project(projectName)
         this.projectManager.projects.push(newProject)
         this.createListElement(projectName)
-    } //
+    }
 
     createListElement = (projectName) => {
         const li = document.createElement('li')
         li.className = 'project-item'
         
-        // Create project title element
         const title = document.createElement('span')
         title.textContent = projectName
         title.className = 'project-title'
     
-        // Create delete button element
         const deleteBtn = document.createElement('svg')
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.innerHTML = '<img src="./assets/delete.svg" alt="Delete">'; // Replace with your delete image path
+        deleteBtn.className = 'delete-btn'
+        deleteBtn.innerHTML = '<img src="./assets/delete.svg" alt="Delete">'
     
-        // Append title and delete button to list item
-        li.appendChild(title);
-        li.appendChild(deleteBtn);
+        li.append(title, deleteBtn)
+        this.projectList.appendChild(li)
     
-        // Append list item to project list
-        this.projectList.appendChild(li);
-    
-        // Add event listener to delete button
-        deleteBtn.addEventListener('click', () => this.deleteProject(projectName));
+        deleteBtn.addEventListener('click', () => this.deleteProject(projectName))
     }
-    
 
     hideProjectInputField = () => {
         if (this.projectInput) {
             this.projectInput.remove()
             this.projectInput = null
         } 
-    } //
+    }
 
-    checkIfExists = (projectName) => {
+    isExisting = (projectName) => {
         return this.projectManager.projects.some(project => project.title === projectName)
-    } //
+    } 
 
     navigateItem = (e) => {
         this.currentTab = e.target.textContent
         this.getCurrentTab()
-    } //
+    } 
  
     getCurrentTab = () => {
         console.log(this.currentTab)
@@ -394,14 +386,14 @@ export default class DOM {
             case 'Week': this.loadWeek(); break
             default: this.displayProjectTodos(this.currentTab); break
         }
-    } //
+    } 
 
     loadHome = () => {
         const header = document.querySelector('h1')
         header.textContent = 'Home'
         this.displayAllTodos()
         this.removeButton()
-    } //
+    } 
 
     loadToday = () => {
         const header = document.querySelector('h1')
@@ -418,7 +410,7 @@ export default class DOM {
             } 
         }
         this.removeButton()
-    } //
+    } 
 
     loadWeek = () => {
         const header = document.querySelector('h1')
@@ -428,10 +420,12 @@ export default class DOM {
         this.clearTodos()
     
         const { start, end } = this.getWeekDates() // Get start and end of the week
-    
-        const projects = this.projectManager.getProjects();
+        console.log(start, end)
+        
+        const projects = this.projectManager.getProjects()
         for (const project of projects) {
             const weekTodos = project.todos.filter(todo => todo.dueDate >= start && todo.dueDate <= end)
+            console.log(weekTodos)
             for (const todo of weekTodos) {
                 this.createTodoContainer(todo) // Display the filtered todos
             }
@@ -505,7 +499,7 @@ export default class DOM {
         })
 
         this.priorityBtn.addEventListener('click', this.setPriority.bind(this))
-        this.projectList.addEventListener('click', this.handleProjectClick.bind(this));
+        this.projectList.addEventListener('click', this.handleProjectClick.bind(this))
         this.addProjectBtn.addEventListener('click', this.showProjectInputField.bind(this))
         this.exitBtn.addEventListener('click', this.closeModal.bind(this))
     }
