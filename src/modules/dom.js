@@ -1,5 +1,8 @@
 import Project from './project.js'
 import Todo from './todo.js'
+import editSVG from '../assets/edit.svg'
+import deleteSVG from '../assets/delete.svg'
+
 
 export default class DOM {
     constructor(projectManager) {
@@ -168,6 +171,8 @@ export default class DOM {
             }
         }
 
+        
+
         const itemContainer = document.createElement('div')
         itemContainer.className = 'item-container'
         itemContainer.innerHTML = ` <span class="circle"></span>
@@ -176,10 +181,10 @@ export default class DOM {
                                             <div class="title">${todo.title}</div>
                                             <div class="actions-container">
                                                 <div class="edit-btn">
-                                                    <img class="svg" src="./assets/edit.svg" alt="edit svg">
+                                                    <img class="svg" src="${editSVG}" alt="edit svg">
                                                 </div>
                                                 <div class="delete-btn">
-                                                    <img class="svg" src="./assets/delete.svg" alt="delete svg">
+                                                    <img class="svg" src="${deleteSVG}" alt="delete svg">\
                                                 </div>
                                             </div>
                                         </header>
@@ -351,16 +356,21 @@ export default class DOM {
         const title = document.createElement('span')
         title.textContent = projectName
         title.className = 'project-title'
-    
-        const deleteBtn = document.createElement('svg')
+        
+        const deleteBtn = document.createElement('div')
         deleteBtn.className = 'delete-btn'
-        deleteBtn.innerHTML = '<img src="./assets/delete.svg" alt="Delete">'
-    
-        li.append(title, deleteBtn)
-        this.projectList.appendChild(li)
-    
+
+        const deleteImg = document.createElement('img')
+        deleteImg.src = deleteSVG
+        deleteImg.alt = 'Delete'
+        deleteBtn.appendChild(deleteImg)
+        
+        li.append(title, deleteBtn);
+        this.projectList.appendChild(li);
+        
         deleteBtn.addEventListener('click', () => this.deleteProject(projectName))
     }
+    
 
     hideProjectInputField = () => {
         if (this.projectInput) {
