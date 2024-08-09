@@ -2,7 +2,7 @@ import Storage from './storage.js';
 
 export default class ProjectManager {
     constructor() {
-        this.projects = Storage.loadProjects() // Load projects from local storage initially
+        this.projects = Storage.loadProjects() 
         if (this.projects.length === 0) {
             // If no projects are loaded, initialize with default projects
             this.projects = [
@@ -13,13 +13,16 @@ export default class ProjectManager {
                             title: 'Todo 1',
                             description: "Description 1",
                             dueDate: '2024-08-02', 
-                            priority: "High"
+                            priority: "High",
+                            completed: false
+                            
                         },
                         {
                             title: 'Todo 2',
                             description: "Description 2",
                             dueDate: '2024-07-31', 
-                            priority: "Medium"
+                            priority: "Medium",
+                            completed: false
                         }
                     ]
                 }, 
@@ -30,13 +33,15 @@ export default class ProjectManager {
                             title: 'Todo 3',
                             description: "Description 3",
                             dueDate: '2024-07-31', 
-                            priority: "Low"
+                            priority: "Low",
+                            completed: false
                         },
                         {
                             title: 'Todo 4',
                             description: "Description 4",
                             dueDate: '2024-07-31', 
-                            priority: "High"
+                            priority: "High",
+                            completed: false
                         }
                     ] 
                 }, 
@@ -47,13 +52,15 @@ export default class ProjectManager {
                             title: 'Todo 5',
                             description: "Description 5",
                             dueDate: '2024-07-31', 
-                            priority: "Medium"
+                            priority: "Medium",
+                            completed: false
                         },    
                         {
                             title: 'Todo 6',
                             description: "Description 6",
                             dueDate: '2024-07-31', 
-                            priority: "Low"
+                            priority: "Low",
+                            completed: false
                         }    
                     ]
                 }

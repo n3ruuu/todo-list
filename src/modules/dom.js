@@ -187,12 +187,24 @@ export default class DOM {
         todosContainer.appendChild(itemContainer)
         this.setPriorityColor(itemContainer, todo.priority)
 
-        const circle = itemContainer.querySelector('.circle')
+        const circle = itemContainer.querySelector('.circle');
         if (circle) {
+            if (todo.completed) {
+                circle.classList.add('shaded');
+                itemContainer.querySelector('.text-container').style.textDecoration = 'line-through';
+            }
             circle.addEventListener('click', () => {
-                circle.classList.toggle('shaded')
-                this.checkIfDone(circle, itemContainer)
-            })
+                circle.classList.toggle('shaded');
+                this.checkIfDone(circle, itemContainer);
+                const isShaded = circle.classList.contains('shaded');
+                const title = itemContainer.querySelector('.title').textContent.trim();
+                const project = this.projectManager.findProject(title);
+                const todoItem = project.todos.find(t => t.title === title);
+                if (todoItem) {
+                    todoItem.completed = isShaded;
+                    this.saveProjects(); // Save the state after toggling
+                }
+            });
         }
     }
 
