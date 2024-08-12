@@ -2,7 +2,7 @@ import Project from './project.js'
 import Todo from './todo.js'
 import editSVG from '../assets/edit.svg'
 import deleteSVG from '../assets/delete.svg'
-
+import moment from 'moment'
 
 export default class DOM {
     constructor(projectManager) {
@@ -140,7 +140,6 @@ export default class DOM {
     }
 
     handleProjectClick = (e) => {
-        console.log('sadjasdio')
         if (e.target.tagName === 'SPAN') {
             const projectName = e.target.textContent
             this.selectedProject = projectName
@@ -172,7 +171,6 @@ export default class DOM {
         }
 
         
-
         const itemContainer = document.createElement('div')
         itemContainer.className = 'item-container'
         itemContainer.innerHTML = ` <span class="circle"></span>
@@ -279,14 +277,11 @@ export default class DOM {
         const confirmed = confirm(`Are you sure you want to delete the project "${projectTitle}"?`)
         if (confirmed) {
             this.projectManager.projects = this.projectManager.projects.filter(project => project.title !== projectTitle)
-            this.projectManager.saveProjects()
             this.saveProjects()
             this.displayProjects()
             this.loadHome()
         }
     }
-    
-    
 
     createAddTodoButton = () => {
         const todosContainer = document.querySelector('.todos-container')
@@ -383,7 +378,7 @@ export default class DOM {
 
     isExisting = (projectName) => {
         return this.projectManager.projects.some(project => project.title === projectName)
-    } 
+    }   
 
     navigateItem = (e) => {
         this.currentTab = e.target.textContent
@@ -412,7 +407,7 @@ export default class DOM {
         header.textContent = 'Today'
         this.clearTodos()
 
-        const today = new Date().toISOString().split('T')[0]
+        const today = moment().format('YYYY-MM-DD')
         console.log(today)
         const projects = this.projectManager.getProjects() 
         for (const project of projects) {
@@ -431,7 +426,9 @@ export default class DOM {
         this.removeButton()
         this.clearTodos()
     
-        const { start, end } = this.getWeekDates() // Get start and end of the week
+        const start = moment().startOf('week').format('YYYY-MM-DD')
+        const end = moment().endOf('week').format('YYYY-MM-DD')
+
         console.log(start, end)
         
         const projects = this.projectManager.getProjects()
@@ -443,22 +440,6 @@ export default class DOM {
             }
         }
     }
-
-    getWeekDates = () => {
-        const now = new Date()
-        const dayOfWeek = now.getDay() // 0 (Sunday) to 6 (Saturday)
-        const startOfWeek = new Date(now)
-        startOfWeek.setDate(now.getDate() - dayOfWeek) // Move to the start of the week
-    
-        const endOfWeek = new Date(startOfWeek)
-        endOfWeek.setDate(startOfWeek.getDate() + 6) // Move to the end of the week
-    
-        // Format dates as YYYY-MM-DD
-        const start = startOfWeek.toISOString().split('T')[0]
-        const end = endOfWeek.toISOString().split('T')[0]
-    
-        return { start, end }
-    } // ??
     
     displayAllTodos = () => {
         this.clearTodos()
