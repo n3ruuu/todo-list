@@ -32,8 +32,8 @@ export default class DOM {
 	}
 
 	showEditModal = (todoItem) => {
-		const { todoTitleField, todoDescriptionField, todoDuedateField } =
-			this.getInputFields()
+		const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
+
 		todoTitleField.value = todoItem.title
 		todoDescriptionField.value = todoItem.description
 		todoDuedateField.value = todoItem.dueDate
@@ -44,16 +44,12 @@ export default class DOM {
 
 	saveEditedTask = (e, todoItem) => {
 		e.preventDefault()
-		const { todoTitleField, todoDescriptionField, todoDuedateField } =
-			this.getInputFields()
+		const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
 		const newPriority = this.selectedPriority
-			? this.selectedPriority.charAt(0).toUpperCase() +
-				this.selectedPriority.slice(1).toLowerCase()
+			? this.selectedPriority.charAt(0).toUpperCase() + this.selectedPriority.slice(1).toLowerCase()
 			: todoItem.priority
 
-		const index = this.selectedProject.todos.findIndex(
-			(todo) => todo === todoItem,
-		)
+		const index = this.selectedProject.todos.findIndex((todo) => todo === todoItem)
 		if (index !== -1) {
 			console.log("Saving edited task for ", todoItem)
 
@@ -75,9 +71,7 @@ export default class DOM {
 	deleteTodo = (e) => {
 		const todoTitle = e.target.closest(".todo-header").textContent.trim()
 		this.selectedProject = this.projectManager.findProject(todoTitle)
-		const todoIndex = this.selectedProject.todos.findIndex(
-			(todo) => todo.title === todoTitle,
-		)
+		const todoIndex = this.selectedProject.todos.findIndex((todo) => todo.title === todoTitle)
 		if (todoIndex !== -1) {
 			this.selectedProject.todos.splice(todoIndex, 1)
 			this.getCurrentTab()
@@ -95,16 +89,12 @@ export default class DOM {
 
 	replaceAddToEdit = (button, isEditing, todoItem) => {
 		button.removeEventListener("click", (e) => this.addTask(e))
-		button.removeEventListener("click", (e) =>
-			this.saveEditedTask(e, todoItem),
-		)
+		button.removeEventListener("click", (e) => this.saveEditedTask(e, todoItem))
 
 		if (isEditing) {
 			console.log("Editing Task")
 			button.textContent = "Edit Task"
-			button.addEventListener("click", (e) =>
-				this.saveEditedTask(e, todoItem),
-			)
+			button.addEventListener("click", (e) => this.saveEditedTask(e, todoItem))
 		} else {
 			console.log("Adding task")
 			button.textContent = "Add Task"
@@ -116,10 +106,7 @@ export default class DOM {
 		const todoContainers = document.querySelectorAll(".item-container")
 		todoContainers.forEach((container) => {
 			const titleElement = container.querySelector(".title")
-			if (
-				titleElement &&
-				titleElement.textContent.trim() === updatedTodoItem.title
-			) {
+			if (titleElement && titleElement.textContent.trim() === updatedTodoItem.title) {
 				this.setPriorityColor(container, updatedTodoItem.priority)
 			}
 		})
@@ -133,10 +120,7 @@ export default class DOM {
 
 		if (priorityValue) {
 			priorityBtns.forEach((button) => {
-				if (
-					button.textContent.trim() ===
-					priorityValue.toString().toUpperCase()
-				) {
+				if (button.textContent.trim() === priorityValue.toString().toUpperCase()) {
 					button.classList.add("active")
 				}
 			})
@@ -147,11 +131,9 @@ export default class DOM {
 		if (e.target.tagName === "BUTTON") {
 			const priorityValue = e.target.textContent
 			this.selectedPriority =
-				priorityValue.charAt(0).toUpperCase() +
-				priorityValue.slice(1).toLowerCase()
+				priorityValue.charAt(0).toUpperCase() + priorityValue.slice(1).toLowerCase()
 
-			const priorityBtns =
-				document.querySelectorAll(".priority button")
+			const priorityBtns = document.querySelectorAll(".priority button")
 			priorityBtns.forEach((button) => {
 				button.classList.remove("active")
 			})
@@ -215,21 +197,15 @@ export default class DOM {
 		if (circle) {
 			if (todo.completed) {
 				circle.classList.add("shaded")
-				itemContainer.querySelector(
-					".text-container",
-				).style.textDecoration = "line-through"
+				itemContainer.querySelector(".text-container").style.textDecoration = "line-through"
 			}
 			circle.addEventListener("click", () => {
 				circle.classList.toggle("shaded")
 				this.checkIfDone(circle, itemContainer)
 				const isShaded = circle.classList.contains("shaded")
-				const title = itemContainer
-					.querySelector(".title")
-					.textContent.trim()
+				const title = itemContainer.querySelector(".title").textContent.trim()
 				const project = this.projectManager.findProject(title)
-				const todoItem = project.todos.find(
-					(t) => t.title === title,
-				)
+				const todoItem = project.todos.find((t) => t.title === title)
 				if (todoItem) {
 					todoItem.completed = isShaded
 					this.saveProjects() // Save the state after toggling
@@ -243,9 +219,7 @@ export default class DOM {
 		const textContainer = itemContainer.querySelector(".text-container")
 
 		if (textContainer) {
-			textContainer.style.textDecoration = isShaded
-				? "line-through"
-				: "none"
+			textContainer.style.textDecoration = isShaded ? "line-through" : "none"
 		}
 	}
 
@@ -271,15 +245,10 @@ export default class DOM {
 
 	addTask = (e) => {
 		e.preventDefault()
-		const { todoTitleField, todoDescriptionField, todoDuedateField } =
-			this.getInputFields()
+		const { todoTitleField, todoDescriptionField, todoDuedateField } = this.getInputFields()
 		const priority = this.selectedPriority
 
-		if (
-			!todoTitleField.value ||
-			!todoDescriptionField.value ||
-			!todoDuedateField.value
-		) {
+		if (!todoTitleField.value || !todoDescriptionField.value || !todoDuedateField.value) {
 			alert("Please fill in all fields.")
 			return
 		}
@@ -290,9 +259,7 @@ export default class DOM {
 			todoDuedateField.value.trim(),
 			priority,
 		)
-		const todos = this.projectManager.getTodosByTitle(
-			this.selectedProject,
-		)
+		const todos = this.projectManager.getTodosByTitle(this.selectedProject)
 		todos.push(newTodo)
 		this.closeModal()
 		this.displayProjectTodos(this.selectedProject)
@@ -316,14 +283,11 @@ export default class DOM {
 	}
 
 	deleteProject = (projectTitle) => {
-		const confirmed = confirm(
-			`Are you sure you want to delete the project "${projectTitle}"?`,
-		)
+		const confirmed = confirm(`Are you sure you want to delete the project "${projectTitle}"?`)
 		if (confirmed) {
-			this.projectManager.projects =
-				this.projectManager.projects.filter(
-					(project) => project.title !== projectTitle,
-				)
+			this.projectManager.projects = this.projectManager.projects.filter(
+				(project) => project.title !== projectTitle,
+			)
 			this.saveProjects()
 			this.displayProjects()
 			this.loadHome()
@@ -343,9 +307,7 @@ export default class DOM {
 			this.clearInputFields()
 		})
 
-		document
-			.querySelector(".content")
-			.insertBefore(this.addTodoBtn, todosContainer)
+		document.querySelector(".content").insertBefore(this.addTodoBtn, todosContainer)
 	}
 
 	showProjectInputField = () => {
@@ -415,9 +377,7 @@ export default class DOM {
 		li.append(title, deleteBtn)
 		this.projectList.appendChild(li)
 
-		deleteBtn.addEventListener("click", () =>
-			this.deleteProject(projectName),
-		)
+		deleteBtn.addEventListener("click", () => this.deleteProject(projectName))
 	}
 
 	hideProjectInputField = () => {
@@ -428,9 +388,7 @@ export default class DOM {
 	}
 
 	isExisting = (projectName) => {
-		return this.projectManager.projects.some(
-			(project) => project.title === projectName,
-		)
+		return this.projectManager.projects.some((project) => project.title === projectName)
 	}
 
 	navigateItem = (e) => {
@@ -472,9 +430,7 @@ export default class DOM {
 		console.log(today)
 		const projects = this.projectManager.getProjects()
 		for (const project of projects) {
-			const todayTodos = project.todos.filter(
-				(todo) => todo.dueDate === today,
-			)
+			const todayTodos = project.todos.filter((todo) => todo.dueDate === today)
 			for (const todo of todayTodos) {
 				this.createTodoContainer(todo)
 			}
@@ -496,9 +452,7 @@ export default class DOM {
 
 		const projects = this.projectManager.getProjects()
 		for (const project of projects) {
-			const weekTodos = project.todos.filter(
-				(todo) => todo.dueDate >= start && todo.dueDate <= end,
-			)
+			const weekTodos = project.todos.filter((todo) => todo.dueDate >= start && todo.dueDate <= end)
 			console.log(weekTodos)
 			for (const todo of weekTodos) {
 				this.createTodoContainer(todo) // Display the filtered todos
@@ -521,8 +475,7 @@ export default class DOM {
 		}
 	}
 
-	clearTodos = () =>
-		(document.querySelector(".todos-container").innerHTML = "")
+	clearTodos = () => (document.querySelector(".todos-container").innerHTML = "")
 
 	showModal = () => (this.modal.style.display = "block")
 
@@ -557,18 +510,9 @@ export default class DOM {
 			item.addEventListener("click", this.navigateItem.bind(this))
 		})
 
-		this.priorityBtn.addEventListener(
-			"click",
-			this.setPriority.bind(this),
-		)
-		this.projectList.addEventListener(
-			"click",
-			this.handleProjectClick.bind(this),
-		)
-		this.addProjectBtn.addEventListener(
-			"click",
-			this.showProjectInputField.bind(this),
-		)
+		this.priorityBtn.addEventListener("click", this.setPriority.bind(this))
+		this.projectList.addEventListener("click", this.handleProjectClick.bind(this))
+		this.addProjectBtn.addEventListener("click", this.showProjectInputField.bind(this))
 		this.exitBtn.addEventListener("click", this.closeModal.bind(this))
 	}
 }

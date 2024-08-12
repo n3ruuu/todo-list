@@ -23,17 +23,11 @@
 								var n = "",
 									o = void 0 !== e[5]
 								return (
-									e[4] &&
-										(n += "@supports (".concat(
-											e[4],
-											") {",
-										)),
+									e[4] && (n += "@supports (".concat(e[4], ") {")),
 									e[2] && (n += "@media ".concat(e[2], " {")),
 									o &&
 										(n += "@layer".concat(
-											e[5].length > 0
-												? " ".concat(e[5])
-												: "",
+											e[5].length > 0 ? " ".concat(e[5]) : "",
 											" {",
 										)),
 									(n += t(e)),
@@ -58,12 +52,7 @@
 									(void 0 !== i &&
 										(void 0 === l[5] ||
 											(l[1] = "@layer"
-												.concat(
-													l[5].length > 0
-														? " ".concat(l[5])
-														: "",
-													" {",
-												)
+												.concat(l[5].length > 0 ? " ".concat(l[5]) : "", " {")
 												.concat(l[1], "}")),
 										(l[5] = i)),
 									n &&
@@ -160,8 +149,7 @@
 						}
 						for (var d = o(t, r), a = 0; a < i.length; a++) {
 							var l = n(i[a])
-							0 === e[l].references &&
-								(e[l].updater(), e.splice(l, 1))
+							0 === e[l].references && (e[l].updater(), e.splice(l, 1))
 						}
 						i = d
 					}
@@ -196,11 +184,7 @@
 			540: (t) => {
 				t.exports = function (t) {
 					var e = document.createElement("style")
-					return (
-						t.setAttributes(e, t.attributes),
-						t.insert(e, t.options),
-						e
-					)
+					return t.setAttributes(e, t.attributes), t.insert(e, t.options), e
 				}
 			},
 			56: (t, e, n) => {
@@ -221,19 +205,12 @@
 						update: function (n) {
 							!(function (t, e, n) {
 								var o = ""
-								n.supports &&
-									(o += "@supports (".concat(
-										n.supports,
-										") {",
-									)),
-									n.media &&
-										(o += "@media ".concat(n.media, " {"))
+								n.supports && (o += "@supports (".concat(n.supports, ") {")),
+									n.media && (o += "@media ".concat(n.media, " {"))
 								var r = void 0 !== n.layer
 								r &&
 									(o += "@layer".concat(
-										n.layer.length > 0
-											? " ".concat(n.layer)
-											: "",
+										n.layer.length > 0 ? " ".concat(n.layer) : "",
 										" {",
 									)),
 									(o += n.css),
@@ -245,13 +222,7 @@
 									"undefined" != typeof btoa &&
 									(o +=
 										"\n/*# sourceMappingURL=data:application/json;base64,".concat(
-											btoa(
-												unescape(
-													encodeURIComponent(
-														JSON.stringify(i),
-													),
-												),
-											),
+											btoa(unescape(encodeURIComponent(JSON.stringify(i)))),
 											" */",
 										)),
 									e.styleTagTransform(o, t, e.options)
@@ -309,17 +280,11 @@
 			if (!t && e && (e.currentScript && (t = e.currentScript.src), !t)) {
 				var o = e.getElementsByTagName("script")
 				if (o.length)
-					for (
-						var r = o.length - 1;
-						r > -1 && (!t || !/^http(s?):/.test(t));
-
-					)
+					for (var r = o.length - 1; r > -1 && (!t || !/^http(s?):/.test(t)); )
 						t = o[r--].src
 			}
 			if (!t)
-				throw new Error(
-					"Automatic publicPath is not supported in this browser",
-				)
+				throw new Error("Automatic publicPath is not supported in this browser")
 			;(t = t
 				.replace(/#.*$/, "")
 				.replace(/\?.*$/, "")
@@ -414,8 +379,7 @@
 				if (n) return n
 			}
 		}
-		getAllTodos = () =>
-			this.projects.reduce((t, e) => t.concat(e.todos), [])
+		getAllTodos = () => this.projects.reduce((t, e) => t.concat(e.todos), [])
 		saveProjects = () => {
 			o.saveProjects(this.projects)
 		}
@@ -511,15 +475,11 @@
 		})
 		replaceAddToEdit = (t, e, n) => {
 			t.removeEventListener("click", (t) => this.addTask(t)),
-				t.removeEventListener("click", (t) =>
-					this.saveEditedTask(t, n),
-				),
+				t.removeEventListener("click", (t) => this.saveEditedTask(t, n)),
 				e
 					? (console.log("Editing Task"),
 						(t.textContent = "Edit Task"),
-						t.addEventListener("click", (t) =>
-							this.saveEditedTask(t, n),
-						))
+						t.addEventListener("click", (t) => this.saveEditedTask(t, n)))
 					: (console.log("Adding task"),
 						(t.textContent = "Add Task"),
 						t.addEventListener("click", (t) => this.addTask(t)))
@@ -548,11 +508,9 @@
 				const e = t.target.textContent
 				;(this.selectedPriority =
 					e.charAt(0).toUpperCase() + e.slice(1).toLowerCase()),
-					document
-						.querySelectorAll(".priority button")
-						.forEach((t) => {
-							t.classList.remove("active")
-						}),
+					document.querySelectorAll(".priority button").forEach((t) => {
+						t.classList.remove("active")
+					}),
 					t.target.classList.add("active")
 			}
 		}
@@ -655,8 +613,9 @@
 		}
 		deleteProject = (t) => {
 			confirm(`Are you sure you want to delete the project "${t}"?`) &&
-				((this.projectManager.projects =
-					this.projectManager.projects.filter((e) => e.title !== t)),
+				((this.projectManager.projects = this.projectManager.projects.filter(
+					(e) => e.title !== t,
+				)),
 				this.projectManager.saveProjects(),
 				this.saveProjects(),
 				this.displayProjects(),
@@ -673,9 +632,7 @@
 						this.showModal(),
 						this.clearInputFields()
 				}),
-				document
-					.querySelector(".content")
-					.insertBefore(this.addTodoBtn, t))
+				document.querySelector(".content").insertBefore(this.addTodoBtn, t))
 		}
 		showProjectInputField = () => {
 			this.projectInput ||
@@ -688,9 +645,7 @@
 			return (
 				(t.className = "project-input"),
 				(t.type = "text"),
-				t.addEventListener("keydown", () =>
-					this.handleInputKeyDown.bind(this),
-				),
+				t.addEventListener("keydown", () => this.handleInputKeyDown.bind(this)),
 				t.addEventListener("blur", () => this.hideProjectInputField()),
 				t
 			)
@@ -699,8 +654,7 @@
 			const e = t.target.value.trim()
 			"Enter" === t.key &&
 				"" !== e &&
-				(this.isValid(e) &&
-					(this.appendProject(e), this.saveProjects()),
+				(this.isValid(e) && (this.appendProject(e), this.saveProjects()),
 				(t.target.value = ""),
 				this.hideProjectInputField())
 		}
@@ -729,8 +683,7 @@
 			this.projectInput &&
 				(this.projectInput.remove(), (this.projectInput = null))
 		}
-		isExisting = (t) =>
-			this.projectManager.projects.some((e) => e.title === t)
+		isExisting = (t) => this.projectManager.projects.some((e) => e.title === t)
 		navigateItem = (t) => {
 			;(this.currentTab = t.target.textContent), this.getCurrentTab()
 		}
@@ -755,8 +708,7 @@
 				this.removeButton()
 		}
 		loadToday = () => {
-			;(document.querySelector("h1").textContent = "Today"),
-				this.clearTodos()
+			;(document.querySelector("h1").textContent = "Today"), this.clearTodos()
 			const t = new Date().toISOString().split("T")[0]
 			console.log(t)
 			const e = this.projectManager.getProjects()
@@ -774,9 +726,7 @@
 			console.log(t, e)
 			const n = this.projectManager.getProjects()
 			for (const o of n) {
-				const n = o.todos.filter(
-					(n) => n.dueDate >= t && n.dueDate <= e,
-				)
+				const n = o.todos.filter((n) => n.dueDate >= t && n.dueDate <= e)
 				console.log(n)
 				for (const t of n) this.createTodoContainer(t)
 			}
@@ -801,8 +751,7 @@
 			for (const e of t) this.createTodoContainer(e)
 		}
 		removeButton = () => {
-			this.addTodoBtn &&
-				(this.addTodoBtn.remove(), (this.addTodoBtn = null))
+			this.addTodoBtn && (this.addTodoBtn.remove(), (this.addTodoBtn = null))
 		}
 		clearTodos = () =>
 			(document.querySelector(".todos-container").innerHTML = "")
@@ -812,16 +761,14 @@
 		}
 		cacheDomElements = () => {
 			;(this.sidebar = document.querySelector(".sidebar")),
-				(this.addProjectBtn =
-					document.querySelector(".add-project.btn")),
+				(this.addProjectBtn = document.querySelector(".add-project.btn")),
 				(this.projectList = document.querySelector("ul")),
 				(this.addTaskBtn = document.querySelector(".add-task.btn")),
 				(this.modal = document.querySelector(".modal")),
 				(this.exitBtn = document.querySelector(".exit")),
 				(this.priorityBtn = document.querySelector(".priority")),
 				(this.sidebarItems = document.querySelectorAll(".items .item")),
-				(this.todosContainer =
-					document.querySelector(".todos-container"))
+				(this.todosContainer = document.querySelector(".todos-container"))
 		}
 		bindEvents = () => {
 			this.todosContainer.addEventListener("click", (t) => {
@@ -833,10 +780,7 @@
 				this.sidebarItems.forEach((t) => {
 					t.addEventListener("click", this.navigateItem.bind(this))
 				}),
-				this.priorityBtn.addEventListener(
-					"click",
-					this.setPriority.bind(this),
-				),
+				this.priorityBtn.addEventListener("click", this.setPriority.bind(this)),
 				this.projectList.addEventListener(
 					"click",
 					this.handleProjectClick.bind(this),
@@ -845,10 +789,7 @@
 					"click",
 					this.showProjectInputField.bind(this),
 				),
-				this.exitBtn.addEventListener(
-					"click",
-					this.closeModal.bind(this),
-				)
+				this.exitBtn.addEventListener("click", this.closeModal.bind(this))
 		}
 	}
 	var l = n(72),

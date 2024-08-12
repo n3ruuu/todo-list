@@ -9,5 +9,5 @@ const init = () => {
 	domManager.loadHome()
 	domManager.loadProjects()
 }
-
+3
 init()
