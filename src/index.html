@@ -1,58 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        <div class="sidebar">
-            <button class="add-project btn">Add Project</button>
-            <div class="items">
-                <div class="home item">Home</div>
-                <div class="today item">Today</div>
-                <div class="week item">Week</div>
-                <div class="projects">
-                    <div class="title">Projects</div>
-                    <ul class="project-list">
-             
-                    </ul>
-                </div>
-            </div>
-            
+      <div class="sidebar">
+        <button class="add-project btn">Add Project</button>
+        <div class="items">
+          <div class="home item">Home</div>
+          <div class="today item">Today</div>
+          <div class="week item">Week</div>
+          <div class="projects">
+            <div class="title">Projects</div>
+            <ul class="project-list"></ul>
+          </div>
         </div>
-        <div class="content">
-                <h1></h1>
-                <div class="todos-container"></div>
+      </div>
+      <div class="content">
+        <h1></h1>
+        <div class="todos-container"></div>
 
-                <div class="modal" style="display: none;">
-                    <form action="#" method="post">
-                        <fieldset>
-                             <div class="exit">✕</div>
+        <div class="modal" style="display: none">
+          <form action="#" method="post">
+            <fieldset>
+              <div class="exit">✕</div>
 
-                            <legend>Add a Task</legend>
-        
-                            <textarea name="title" id="title" placeholder="Title" required></textarea>
-                            <textarea name="description" id="description" placeholder="Add task description" required></textarea>
+              <legend>Add a Task</legend>
 
-                            <div class="due-date">
-                                <p>Due Date: </p>
-                                <input type="date" name="duedate" id="duedate" required>
-                            </div>
-                            <div class="priority">
-                                <div class="text">Priority</div>
-                                <button type="button" id="low">LOW</button>
-                                <button type="button" id="medium">MEDIUM</button>
-                                <button type="button" id="high">HIGH</button>
-                            </div>
+              <textarea
+                name="title"
+                id="title"
+                placeholder="Title"
+                required
+              ></textarea>
+              <textarea
+                name="description"
+                id="description"
+                placeholder="Add task description"
+                required
+              ></textarea>
 
-                            <button type="submit" class="add-task btn">ADD TASK</button>
-                        </fieldset>
-                    </form>
-                </div>
+              <div class="due-date">
+                <p>Due Date:</p>
+                <input type="date" name="duedate" id="duedate" required />
+              </div>
+              <div class="priority">
+                <div class="text">Priority</div>
+                <button type="button" id="low">LOW</button>
+                <button type="button" id="medium">MEDIUM</button>
+                <button type="button" id="high">HIGH</button>
+              </div>
+
+              <button type="submit" class="add-task btn">ADD TASK</button>
+            </fieldset>
+          </form>
         </div>
+      </div>
     </main>
     <footer></footer>
-</body>
+  </body>
 </html>
