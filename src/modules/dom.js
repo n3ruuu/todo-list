@@ -310,15 +310,18 @@ export default class DOM {
             this.projectInput = this.createInputField()
             this.projectList.appendChild(this.projectInput)
             this.projectInput.focus()
-        } 
+        } else {
+            this.projectInput.style.display = 'block'
+            this.projectInput.focus()
+        }
     } 
 
     createInputField = () => {
         const input = document.createElement('input')
         input.className = 'project-input'
         input.type = 'text'
-        input.addEventListener('keydown', () => this.handleInputKeyDown.bind(this))
-        input.addEventListener('blur', () => this.hideProjectInputField())
+        input.addEventListener('keydown', this.handleInputKeyDown.bind(this))
+        input.addEventListener('blur', this.hideProjectInputField.bind(this))
         return input
     } 
 
@@ -331,7 +334,7 @@ export default class DOM {
             }
             e.target.value = ''
             this.hideProjectInputField()
-        }
+        } 
     }
 
     isValid = (name) => {
@@ -371,10 +374,9 @@ export default class DOM {
         deleteBtn.addEventListener('click', () => this.deleteProject(projectName))
     }
     
-
     hideProjectInputField = () => {
         if (this.projectInput) {
-            this.projectInput.remove()
+            this.projectInput.style.display = 'none'
             this.projectInput = null
         } 
     }
